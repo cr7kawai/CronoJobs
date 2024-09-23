@@ -1,0 +1,68 @@
+<app-menu></app-menu>
+
+<div class="card">
+    <div class="card-title bg-dark">
+        <h1>Actividad: {{actividad.actividad}}</h1>
+    </div>
+    <div class="card-body bg-light">
+        <div class="row">
+            <div class="col-md-12"><strong>Descripción:</strong> {{actividad.descripcion}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"><strong>Fecha de inicio: </strong>{{ actividad.fecha_inicio !== null && actividad.fecha_inicio !== '' ? actividad.fecha_inicio.substring(0, 10) : 'No tiene fecha de inicio' }}</div>
+            <div class="col-md-4"><strong>Fecha de finalización (esperada): </strong>{{ actividad.fecha_fin !== null && actividad.fecha_fin !== '' ? actividad.fecha_fin.substring(0, 10) : 'No tiene fecha de finalización' }}</div>
+            <div class="col-md-4"><strong>Fecha de termino (real): </strong>{{ actividad.fecha_termino !== null && actividad.fecha_termino !== '' ? actividad.fecha_termino.substring(0, 10) : 'Aún no termina' }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"><strong>Proyecto: </strong>{{ actividad.proyecto }}</div>
+            <div class="col-md-4"><strong>Empleado que realiza: </strong>{{ actividad.nombre }} {{ actividad.ape_paterno }} {{ actividad.ape_materno }}</div>
+            <div class="col-md-4"><strong>Estado: </strong>{{ actividad.estado }}</div>
+        </div>
+        <div class="row" style="text-align: center;" *ngIf="rol == 4">
+            <div class="col-md-12">
+                <button class="btn btn-primary" (click)="culminarActividad()" [disabled]="actividad.estado != 'Pendiente'">Culminar actividad</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title bg-dark">
+        <h1>Comentarios</h1>
+    </div>
+    <div class="card-body bg-light">
+        <div class="card" *ngFor="let comentario of comentarios">
+            <div class="card-body comentario">
+                <h6>{{comentario.fecha.substring(0,10)}}</h6>
+                {{comentario.descripcion}}
+            </div>
+        </div>
+        <div class="row" style="text-align: center;" *ngIf="rol == 4">
+            <div class="col-md-12">
+                <button class="btn btn-success" (click)="abrirComentarioModal()">Agregar comentario</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" *ngIf="comentarioModalAbierto">
+    <mat-dialog-content class="modal-dialog-right registro">
+      <form class="centered-form">
+        <div class="form-title">
+          <h2 style="color: #020061;">Agregar comentario</h2>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="text-align: left; margin-bottom: -10px;">
+            <label>Comentario: </label>
+            <textarea class="form-control texto" name="descripcion" id="descripcion" cols="30" rows="6" placeholder="Se generaron cambios en..." [(ngModel)]="comentarioCreado.descripcion" [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+        </div>
+        <div class="row centered-buttons">
+          <div class="col-md-12 text-center">
+            <button mat-raised-button type="submit" class="btn btn-danger btn-large" (click)="cerrarComentarioModal()">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-large guardar" (click)="agregarComentario()">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </mat-dialog-content>
+  </div>

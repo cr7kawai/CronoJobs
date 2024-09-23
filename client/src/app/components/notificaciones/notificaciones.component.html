@@ -1,0 +1,15 @@
+<app-menu></app-menu>
+
+<div class="card">
+    <div class="card-title bg-dark">
+        <h1>Notificaciones</h1>
+    </div>
+    <div class="card-body bg-light" *ngIf="notificaciones.length != null">
+        <div class="card" *ngFor="let notificacion of notificaciones">
+            <div class="card-body noti">
+                <h6>{{notificacion.fecha.substring(0,10)}}</h6>
+                {{notificacion.comentario}}
+            </div>
+        </div>
+    </div>
+</div>

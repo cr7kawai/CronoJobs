@@ -1,0 +1,67 @@
+body {
+    font-size: 25px;
+    color: #777777;
+    font-family: arial;
+    text-align: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-image: none;
+    background-color: #000c2f;
+}
+
+h1 {
+    font-size: 280px;
+    color: #99A7AF;
+    margin: 70px 0 -25px 0;
+}
+
+h2 {
+    color: #DE6C5D;
+    font-family: arial;
+    font-size: 40px;
+    font-weight: bold;
+    margin: -3px 0 20px;
+}
+
+.message {
+    max-width: 520px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* ------------------
+    Responsive CSS
+--------------------*/
+
+@media (max-width: 600px) {
+    h1{
+        font-size: 200px;
+    }
+
+    h2{
+        margin-top: 10px;
+        font-size: 30px;
+    }
+
+    .message{
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 440px) {
+    h1{
+        font-size: 150px;
+    }
+
+    h2{
+        margin-top: 10px;
+        font-size: 25px;
+    }
+
+    .message{
+        font-size: 15px;
+    }
+}

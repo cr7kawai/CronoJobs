@@ -1,0 +1,90 @@
+<app-menu></app-menu>
+
+<div class="card">
+    <div class="card-title bg-dark">
+        <h1>Proyecto: {{proyecto.nombre}}</h1>
+    </div>
+    <div class="card-body bg-light">
+        <div class="row">
+            <div class="col-md-12"><strong>Descripción:</strong> {{proyecto.descripcion}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"><strong>Fecha de inicio: </strong>{{ proyecto.fecha_inicio !== null && proyecto.fecha_inicio !== '' ? proyecto.fecha_inicio.substring(0, 10) : 'No tiene fecha de inicio' }}</div>
+            <div class="col-md-4"><strong>Fecha de finalización (esperada): </strong>{{ proyecto.fecha_fin !== null && proyecto.fecha_fin !== '' ? proyecto.fecha_fin.substring(0, 10) : 'No tiene fecha de finalización' }}</div>
+            <div class="col-md-4"><strong>Fecha de termino (real): </strong>{{ proyecto.fecha_termino !== null && proyecto.fecha_termino !== '' ? proyecto.fecha_termino.substring(0, 10) : 'Aún no termina' }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><strong>Área: </strong>{{ proyecto.area }}</div>
+            <div class="col-md-6"><strong>Estado: </strong>{{ proyecto.estado }}</div>
+        </div>
+        <div class="row"  *ngIf="rol == 3">
+            <div class="col-md-6" style="text-align: end;">
+                <a class="btn btn-warning" href="/actividades/{{proyecto.pk_proyecto}}">Ver actividades</a>
+            </div>
+            <div class="col-md-6" style="text-align: start">
+                <button class="btn btn-primary" (click)="culminarProyecto()" [disabled]="proyecto.estado != 'Pendiente'">Culminar proyecto</button>
+            </div>
+        </div>
+        <div class="row" style="text-align: center;" *ngIf="rol != 3">
+            <div class="col-md-12">
+                <a class="btn btn-warning" href="/actividades/{{proyecto.pk_proyecto}}">Ver actividades</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title bg-dark">
+        <h1>Notas</h1>
+    </div>
+    <div class="card-body bg-light">
+        <div class="card" *ngFor="let nota of notas">
+            <div class="card-body" [ngClass]="{'danger': nota.prioridad == 1, 'warning': nota.prioridad == 2, 'primary': nota.prioridad == 3}">
+                <h6>{{nota.fecha.substring(0,10)}} - <strong>{{nota.nombre}}</strong></h6>
+                {{nota.descripcion}}
+            </div>
+        </div>
+        <div class="row" style="text-align: center;" *ngIf="rol == 2 || rol == 3">
+            <div class="col-md-12">
+                <button class="btn btn-success" (click)="abrirNotaModal()">Agregar nota</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" *ngIf="notaModalAbierto">
+    <mat-dialog-content class="modal-dialog-right registro">
+      <form class="centered-form">
+        <div class="form-title">
+          <h2 style="color: #020061;">Agregar nota</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6" style="text-align: left; margin-bottom: -10px;">
+              <label>Título: </label>
+              <input type="text" class="form-control texto" name="titulo" id="titulo" placeholder="Cambios urgentes" [(ngModel)]="notaCreada.nombre" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col-md-6" style="text-align: left; margin-bottom: -10px;">
+                <label>Prioridad: </label>
+                <select class="form-control" [(ngModel)]="notaCreada.prioridad" [ngModelOptions]="{standalone: true}">
+                    <option value="1">Urgente</option>
+                    <option value="2">Importante</option>
+                    <option value="3">Neutral</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="text-align: left; margin-bottom: -10px;">
+            <label>Descripción: </label>
+            <textarea class="form-control texto" name="descripcion" id="descripcion" cols="30" rows="6" placeholder="Se generaron cambios en..." [(ngModel)]="notaCreada.descripcion" [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+        </div>
+        <div class="row centered-buttons">
+          <div class="col-md-12 text-center">
+            <button mat-raised-button type="submit" class="btn btn-danger btn-large" (click)="cerrarNotaModal()">Cerrar</button>
+            <button type="submit" class="btn btn-primary btn-large guardar" (click)="agregarNota()">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </mat-dialog-content>
+  </div>
+  

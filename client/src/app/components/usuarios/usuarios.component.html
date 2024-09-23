@@ -1,0 +1,300 @@
+<app-menu></app-menu>
+<div class="card">
+  <div class="card-title">
+    <div class="row" *ngIf="rol == 1">
+      <div class="col-7">
+        <mat-form-field class="search-input">
+          <input class="filtro" matInput (input)="applyFilter($event)" placeholder="Buscar usuarios">
+        </mat-form-field>
+      </div>
+      <div class="col-3"></div>
+      <div class="col-2">
+        <button mat-icon-button class="btn btn-secondary agregar" (click)="abrirRegistroModal()">
+          Agregar empleado
+        </button>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="rol != 1">
+      <div class="col-12" style="width: 96%;">
+        <mat-form-field class="search-input">
+          <input class="filtro" matInput (input)="applyFilter($event)" placeholder="Buscar usuarios">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="Matricula" class="mat-column-Matricula">
+          <th mat-header-cell *matHeaderCellDef><strong>Matrícula</strong></th>
+          <td mat-cell *matCellDef="let row">{{ row.pk_usuario }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nombre" class="mat-column-Nombre">
+          <th mat-header-cell *matHeaderCellDef><strong>Nombre</strong></th>
+          <td mat-cell *matCellDef="let row">{{ row.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Genero" class="mat-column-Genero">
+          <th mat-header-cell *matHeaderCellDef><strong>Género</strong></th>
+          <td mat-cell *matCellDef="let row">{{ row.genero }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Rol" class="mat-column-Rol">
+          <th mat-header-cell *matHeaderCellDef><strong>Rol</strong></th>
+          <td mat-cell *matCellDef="let row">{{ row.rol }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Area" class="mat-column-Area">
+          <th mat-header-cell *matHeaderCellDef><strong>Área</strong></th>
+          <td mat-cell *matCellDef="let row">{{ row.area }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Acciones" class="mat-column-Acciones">
+            <th mat-header-cell *matHeaderCellDef><strong>Acciones</strong></th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button class="btn btn-primary" matTooltip="Ver" (click)="abrirVistaModal(row.pk_usuario)" [disabled]="row.rol === 'Administrador' || row.rol == 'CEO'"><mat-icon>visibility</mat-icon></button>
+                <button mat-icon-button class="btn btn-success" *ngIf="rol == 1" matTooltip="Modificar" [disabled]="row.rol === 'Administrador'" (click)="abrirModificacionModal(row.pk_usuario)"><mat-icon>edit</mat-icon></button>
+                <button mat-icon-button class="btn btn-warning" *ngIf="rol == 1" matTooltip="Cambiar contraseña" (click)="abrirPasswordModal(row.pk_usuario, row.email)"><mat-icon>vpn_key</mat-icon></button>
+                <button mat-icon-button class="btn btn-info" matTooltip="Estadística" (click)="verEstadistica(row.pk_usuario)" [disabled]="row.rol === 'Administrador' || row.rol === 'CEO' || row.rol == 'Supervisor'"><mat-icon>pie_chart</mat-icon></button>
+                <button mat-icon-button class="btn btn-danger" *ngIf="rol == 1" matTooltip="Eliminar" [disabled]="row.rol === 'Administrador' || row.rol == 'CEO'" (click)="eliminarUsuario(row.pk_usuario)"><mat-icon>delete</mat-icon></button>
+                </td>
+        </ng-container>
+      
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+      
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+  </div>
+</div>
+
+<div class="overlay" *ngIf="registroModalAbierto">
+  <mat-dialog-content class="modal-dialog-right registro">
+    <form class="centered-form">
+      <div class="form-title">
+        <h2 style="color: #020061;">Registrar empleado</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-4 linea">
+          <label>Nombre(s): </label>
+          <input type="text" class="form-control texto" id="nombre" placeholder="Juan" [(ngModel)]="usuarioCreado.nombre" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-4">
+          <label>Apellido Paterno: </label>
+          <input type="text" class="form-control texto" id="ape_paterno" placeholder="Rodríguez" [(ngModel)]="usuarioCreado.ape_paterno" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-4">
+          <label>Apellido Materno: </label>
+          <input type="text" class="form-control texto" id="ape_materno" placeholder="Suárez" [(ngModel)]="usuarioCreado.ape_materno" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Email: </label>
+          <input type="email" class="form-control texto" id="email" placeholder="juanrs@almotors.com" [(ngModel)]="usuarioCreado.email" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-6">
+          <label>Teléfono: </label>
+          <input type="tel" class="form-control texto" id="telefono" placeholder="4181121719" [(ngModel)]="usuarioCreado.telefono" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Genero: </label>
+          <select class="form-control select-arrow" name="genero" id="genero" [(ngModel)]="usuarioCreado.genero" [ngModelOptions]="{standalone: true}">
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>Fecha de nacimiento: </label>
+          <input type="date" class="form-control texto" id="fecha_nacimiento" [(ngModel)]="usuarioCreado.fecha_nacimiento" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Rol: </label> 
+          <select class="form-control" name="rol" id="rol" [(ngModel)]="usuarioCreado.fk_rol" [ngModelOptions]="{standalone: true}">
+            <option *ngFor="let rol of roles" value="{{rol.pk_rol}}">{{rol.nombre}}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>Área: </label>
+          <select class="form-control" name="area" id="area" [(ngModel)]="usuarioCreado.fk_area" [ngModelOptions]="{standalone: true}">
+            <option *ngFor="let area of areas" value="{{area.pk_area}}">{{area.nombre}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <label>Contraseña: </label>
+          <input type="password" class="form-control texto" id="password" placeholder="********" [(ngModel)]="usuarioCreado.password" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-3"></div>
+      </div>
+      <div class="row centered-buttons">
+        <div class="col-md-12 text-center">
+          <button mat-raised-button type="submit" class="btn btn-danger btn-large" (click)="cerrarRegistroModal()">Cerrar</button>
+          <button type="submit" class="btn btn-primary btn-large guardar" (click)="crearUsuario()">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+</div>
+
+<div class="overlay" *ngIf="modificacionModalAbierto">
+  <mat-dialog-content class="modal-dialog-right registro">
+    <form class="centered-form">
+      <div class="form-title">
+        <h2 style="color: #020061;">Modificar empleado</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <label>Matricula:</label>
+          <input type="text" class="form-control texto" id="matricula" placeholder="matricula" disabled [(ngModel)]="datosUsuario.pk_usuario" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-3">
+          <label>Nombre(s): </label>
+          <input type="text" class="form-control texto" id="nombre" placeholder="Juan" [(ngModel)]="datosUsuario.nombre" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-3">
+          <label>Apellido Paterno: </label>
+          <input type="text" class="form-control texto" id="ape_paterno" placeholder="Rodríguez" [(ngModel)]="datosUsuario.ape_paterno" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-3">
+          <label>Apellido Materno: </label>
+          <input type="text" class="form-control texto" id="ape_materno" placeholder="Suárez" [(ngModel)]="datosUsuario.ape_materno" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Email: </label>
+          <input type="email" class="form-control texto" id="email" placeholder="juanrs@almotors.com" [(ngModel)]="datosUsuario.email" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-6">
+          <label>Teléfono: </label>
+          <input type="tel" class="form-control texto" id="telefono" placeholder="4181121719" [(ngModel)]="datosUsuario.telefono" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Genero: </label>
+          <select class="form-control select-arrow" name="genero" id="genero" [(ngModel)]="datosUsuario.genero">
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>Fecha de nacimiento: </label>
+          <input type="date" class="form-control texto" id="fecha_nacimiento" [(ngModel)]="datosUsuario.fecha_nacimiento" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Rol: </label> 
+          <select class="form-control" name="rol" id="rol" [(ngModel)]="datosUsuario.fk_rol" [disabled]="datosUsuario.fk_rol === 2">
+            <option *ngFor="let rol of roles" value="{{rol.pk_rol}}">{{rol.nombre}}</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>Área: </label>
+          <select class="form-control" name="area" id="area" [(ngModel)]="datosUsuario.fk_area" [disabled]="datosUsuario.fk_rol === 2">
+            <option *ngFor="let area of areas" value="{{area.pk_area}}">{{area.nombre}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row centered-buttons">
+        <div class="col-md-12 text-center">
+          <button mat-raised-button type="submit" class="btn btn-danger btn-large" (click)="cerrarModificacionModal()">Cerrar</button>
+          <button type="submit" class="btn btn-primary btn-large guardar" (click)="modificarUsuario()">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+</div>
+
+<div class="overlay" *ngIf="passwordModalAbierto">
+  <mat-dialog-content class="modal-dialog-right password">
+    <form class="centered-form">
+      <div class="form-title">
+        <h2 style="color: #020061;">Cambio de contraseña</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label>Nueva contraseña: </label>
+          <input type="password" class="form-control texto" id="password" placeholder="********" [(ngModel)]="usuarioPassword.password" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row centered-buttons">
+        <div class="col-md-12 text-center">
+          <button mat-raised-button type="submit" class="btn btn-danger btn-large" (click)="cerrarPasswordModal()">Cerrar</button>
+          <button type="submit" class="btn btn-primary btn-large guardar" (click)="cambiarPassword()">Guardar</button>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+</div>
+
+<div class="overlay" *ngIf="vistaModalAbierto">
+  <mat-dialog-content class="modal-dialog-right registro">
+    <form class="centered-form">
+      <div class="form-title">
+        <h2 style="color: #020061;">Datos del empleado</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-4 linea">
+          <label>Nombre(s): </label>
+          <input type="text" disabled class="form-control texto" id="nombre" placeholder="Juan" [(ngModel)]="vistaDatos.nombre" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-4">
+          <label>Apellido Paterno: </label>
+          <input type="text" disabled class="form-control texto" id="ape_paterno" placeholder="Rodríguez" [(ngModel)]="vistaDatos.ape_paterno" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-4">
+          <label>Apellido Materno: </label>
+          <input type="text" disabled class="form-control texto" id="ape_materno" placeholder="Suárez" [(ngModel)]="vistaDatos.ape_materno" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Email: </label>
+          <input type="email" disabled class="form-control texto" id="email" placeholder="juanrs@almotors.com" [(ngModel)]="vistaDatos.email" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-6">
+          <label>Teléfono: </label>
+          <input type="tel" disabled class="form-control texto" id="telefono" placeholder="4181121719" [(ngModel)]="vistaDatos.telefono" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Genero: </label>
+          <input type="tel" disabled class="form-control texto" id="genero" placeholder="genero" [(ngModel)]="vistaDatos.genero" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-6">
+          <label>Fecha de nacimiento: </label>
+          <input type="text" disabled class="form-control texto" id="fecha_nacimiento" [(ngModel)]="vistaDatos.fecha_nacimiento" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Rol: </label> 
+          <input type="text" disabled class="form-control texto" id="rol" [(ngModel)]="vistaDatos.rol" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="col-md-6">
+          <label>Área: </label>
+          <input type="text" disabled class="form-control texto" id="area" [(ngModel)]="vistaDatos.area" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="row centered-buttons">
+        <div class="col-md-12 text-center">
+          <button mat-raised-button type="submit" class="btn btn-danger btn-large" (click)="cerrarVistaModal()">Cerrar</button>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+</div>
