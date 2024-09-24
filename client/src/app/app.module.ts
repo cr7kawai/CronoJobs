@@ -7,14 +7,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { EstadisticaEmpleadoComponent } from './components/estadistica-empleado/estadistica-empleado.component';
 import { EstadisticaProyectoComponent } from './components/estadistica-proyecto/estadistica-proyecto.component';
-import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginatorIntl,
+  MatPaginatorModule,
+} from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -31,6 +33,19 @@ import { NotificacionesComponent } from './components/notificaciones/notificacio
 import { HomeComponent } from './components/home/home.component';
 import { Error403Component } from './error/error403/error403.component';
 import { Error404Component } from './error/error404/error404.component';
+import { CustomPaginatorIntl } from './services/customPaginatorIntl.service';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { FooterComponent } from './footer/footer.component';
+import { MatCardModule } from '@angular/material/card';
+import { EquiposAreasComponent } from './components/equipos-areas/equipos-areas.component';
+import { RegistroEmpresaComponent } from './components/registro-empresa/registro-empresa.component';
+import { MapaComponent } from './components/mapa/mapa.component';
+import { PoliticaPrivacidadComponent } from './components/politica-privacidad/politica-privacidad.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { BuscadorComponent } from './components/buscador/buscador.component';
+import { NgxCaptchaModule } from 'ngx-captcha';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -46,8 +61,15 @@ import { Error404Component } from './error/error404/error404.component';
     ActividadesComponent,
     NotificacionesComponent,
     HomeComponent,
-    Error404Component, 
-    Error403Component
+    Error404Component,
+    Error403Component,
+    BreadcrumbComponent,
+    FooterComponent,
+    EquiposAreasComponent,
+    RegistroEmpresaComponent,
+    MapaComponent,
+    PoliticaPrivacidadComponent,
+    BuscadorComponent
   ],
   imports: [
     BrowserModule,
@@ -66,9 +88,19 @@ import { Error404Component } from './error/error404/error404.component';
     MatGridListModule,
     MatDialogModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule,
+    MatStepperModule,
+    MatInputModule,
+    NgxCaptchaModule,
+    MatMenuModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useClass: CustomPaginatorIntl,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

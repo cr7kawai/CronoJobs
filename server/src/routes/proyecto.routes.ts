@@ -11,7 +11,7 @@ class ProyectoRoutes{
     }
 
     config(): void {
-        this.router.get('/',proyectoController.obtenerProyectos);
+        this.router.get('/empresa/:id_empresa',proyectoController.obtenerProyectos);
         this.router.get('/:id_proyecto',proyectoController.verProyecto);
         this.router.get('/obtener/:id_proyecto',proyectoController.obtenerProyecto);
         this.router.get('/area/:id_area',proyectoController.obtenerProyectosArea);

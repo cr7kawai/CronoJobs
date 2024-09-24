@@ -7,6 +7,8 @@ import proyectoRoutes from './routes/proyecto.routes';
 import notaRoutes from './routes/nota.routes';
 import actividadRoutes from './routes/actividad.routes';
 import recursoRoutes from './routes/recurso.routes';
+import areaRoutes from './routes/area.routes';
+import empresaRoutes from './routes/empresa.routes';
 
 class Server {
 
@@ -33,6 +35,8 @@ class Server {
         this.app.use('/api/nota',notaRoutes);
         this.app.use('/api/actividad',actividadRoutes);
         this.app.use('/api/recurso',recursoRoutes);
+        this.app.use('/api/area', areaRoutes);
+        this.app.use('/api/empresa', empresaRoutes);
     }
 
     start() {

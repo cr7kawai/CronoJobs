@@ -6,12 +6,16 @@ const nodemailer = require("nodemailer");
 class UserController {
 
   public async obtenerUsuarios(req: Request, res: Response) {
-    const usuarios = await pool.query("SELECT u.pk_usuario, CONCAT(u.nombre,' ',u.ape_paterno,' ',u.ape_materno) AS nombre, u.genero, r.nombre as rol, a.nombre as area, u.email FROM usuario as u LEFT JOIN rol as r ON r.pk_rol = u.fk_rol LEFT JOIN area as a ON a.pk_area = u.fk_area ORDER BY CASE WHEN r.pk_rol = 4 THEN 1 ELSE 0 END, r.pk_rol ASC;");
-    res.json(usuarios);
+    const { id_empresa } = req.params;
+    const usuarios = await pool.query("SELECT u.pk_usuario, CONCAT(u.nombre,' ',u.ape_paterno,' ',u.ape_materno) AS nombre, u.genero, r.nombre as rol, a.nombre as area, u.email FROM usuario as u LEFT JOIN rol as r ON r.pk_rol = u.fk_rol LEFT JOIN area as a ON a.pk_area = u.fk_area WHERE u.fk_empresa = ? ORDER BY CASE WHEN r.pk_rol = 4 THEN 1 ELSE 0 END, r.pk_rol ASC;",
+    [id_empresa]);
+    if (usuarios.length > 0) {
+      return res.json(usuarios);
+    }
   }
 
   public async obtenerRoles(req: Request, res: Response){
-    const roles = await pool.query("SELECT * FROM rol WHERE pk_rol != 1 AND pk_rol != 2 AND pk_rol !=3");
+    const roles = await pool.query("SELECT * FROM rol WHERE pk_rol != 2");
     res.json(roles);
   }
 
@@ -45,10 +49,10 @@ class UserController {
   }
 
   public async obtenerUsuariosArea(req: Request, res: Response): Promise<any> {
-    const { id_area } = req.params;
+    const { id_area, id_empresa } = req.params;
     const usuarios = await pool.query(
-      "SELECT u.pk_usuario, concat(u.nombre,' ',u.ape_paterno,' ',u.ape_materno) as nombre, u.genero, r.nombre as rol, a.nombre as area, u.email FROM usuario as u LEFT JOIN rol as r ON r.pk_rol = u.fk_rol LEFT JOIN area as a ON a.pk_area = u.fk_area WHERE u.fk_area = ? order by r.pk_rol asc",
-      [id_area]
+      "SELECT u.pk_usuario, concat(u.nombre,' ',u.ape_paterno,' ',u.ape_materno) as nombre, u.genero, r.nombre as rol, a.nombre as area, u.email FROM usuario as u LEFT JOIN rol as r ON r.pk_rol = u.fk_rol LEFT JOIN area as a ON a.pk_area = u.fk_area WHERE u.fk_area = ? && u.fk_empresa = ? order by r.pk_rol asc",
+      [id_area, id_empresa]
     );
     if (usuarios.length > 0) {
       return res.json(usuarios);
@@ -66,7 +70,7 @@ class UserController {
         service: "Gmail",
         auth: {
           user: "almotors666@gmail.com",
-          pass: "qtsq kxpt neot gfow",
+          pass: "cnnv omsv vlpo uztu",
         },
       });
 
@@ -114,7 +118,7 @@ class UserController {
         service: "Gmail",
         auth: {
           user: "almotors666@gmail.com",
-          pass: "qtsq kxpt neot gfow",
+          pass: "cnnv omsv vlpo uztu",
         },
       });
 
@@ -173,7 +177,7 @@ class UserController {
     try {
       const { email, password } = req.body;
       const result = await pool.query(
-        "SELECT u.pk_usuario, concat(u.nombre,' ',u.ape_paterno,' ',u.ape_materno) as nombre, u.fk_rol, r.nombre as nombre_rol, u.fk_area FROM usuario as u INNER JOIN rol as r ON r.pk_rol = u.fk_rol WHERE u.email = ? and u.password = ?",
+        "SELECT u.pk_usuario, concat(u.nombre,' ',u.ape_paterno,' ',u.ape_materno) as nombre, u.fk_rol, r.nombre as nombre_rol, u.fk_area, u.fk_empresa, e.fk_suscripcion FROM usuario as u INNER JOIN rol as r ON r.pk_rol = u.fk_rol INNER JOIN empresa as e ON e.pk_empresa = u.fk_empresa WHERE u.email = ? and u.password = ?",
         [email, password]
       );
 
@@ -208,6 +212,32 @@ class UserController {
       }
       res.status(404).json({text: 'No hay notificaciones'});
   }
+
+  public async validarTelefonoEmail(req: Request, res: Response): Promise<any> {
+    try {
+      const { email, telefono } = req.body;
+
+      // Verificar si el correo ya está registrado
+      const usuarioCorreo = await pool.query("SELECT * FROM usuario WHERE email = ?", [email]);
+      if (usuarioCorreo.length > 0) {
+          return res.status(400).json({ message: "El correo electrónico ya ha sido registrado" });
+      }
+
+      // Verificar si el teléfono ya está registrado
+      const usuarioTelefono = await pool.query("SELECT * FROM usuario WHERE telefono = ?", [telefono]);
+      if (usuarioTelefono.length > 0) {
+          return res.status(400).json({ message: "El teléfono ya ha sido registrado" });
+      }
+
+      // Si el correo y el teléfono no están registrados, retornar éxito
+      res.status(200).json({ message: "El correo y el teléfono están disponibles para registro" });
+
+    } catch (error) {
+        console.error("Error al validar el correo y el teléfono:", error);
+        res.status(500).json({ message: "Error al validar el correo y el teléfono" });
+    }
+  }
+
 }
 
 export const userController = new UserController();

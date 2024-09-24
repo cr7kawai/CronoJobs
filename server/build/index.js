@@ -11,6 +11,8 @@ const proyecto_routes_1 = __importDefault(require("./routes/proyecto.routes"));
 const nota_routes_1 = __importDefault(require("./routes/nota.routes"));
 const actividad_routes_1 = __importDefault(require("./routes/actividad.routes"));
 const recurso_routes_1 = __importDefault(require("./routes/recurso.routes"));
+const area_routes_1 = __importDefault(require("./routes/area.routes"));
+const empresa_routes_1 = __importDefault(require("./routes/empresa.routes"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -30,6 +32,8 @@ class Server {
         this.app.use('/api/nota', nota_routes_1.default);
         this.app.use('/api/actividad', actividad_routes_1.default);
         this.app.use('/api/recurso', recurso_routes_1.default);
+        this.app.use('/api/area', area_routes_1.default);
+        this.app.use('/api/empresa', empresa_routes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

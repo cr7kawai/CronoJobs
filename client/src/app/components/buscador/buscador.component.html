@@ -1,0 +1,6 @@
+<div class="search-container">
+    <input type="text" class="form-control" [(ngModel)]="searchQuery" placeholder="Buscar..." (input)="filterKeywords()" (click)="onInputClick($event)">
+    <ul class="search-results" *ngIf="showResults">
+      <li *ngFor="let keyword of filteredKeywords" (click)="redirectToRoute(keyword)">{{ keyword }}</li>
+    </ul>
+</div>

@@ -1,0 +1,50 @@
+<app-menu></app-menu>
+
+<div class="breadcrumb-container">
+  <h1 class="page-title">Mapa del Sitio</h1>
+
+  <div class="breadcrumb">
+    <a href="/" class="breadcrumb-link">Inicio</a>
+    /<span class="breadcrumb-current">Mapa del Sitio</span>
+  </div>
+</div>
+
+<div class="site-map card card-principal">
+  <div class="row justify-content-center">
+    <div class="col-md-3">
+      <a class="link" href="/">
+        <div class="card contenido home">Home</div>
+      </a>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="row col-md-3" *ngIf="siteMap['informacion']">
+      <div class="card contenido titulo col-md-12">Información</div>
+      <div class="col-md-12" *ngFor="let page of siteMap['informacion']">
+        <a class="link" [href]="page[1]">
+          <div class="card contenido informacion">{{ page[0] }}</div>
+        </a>
+      </div>
+    </div>
+    <div class="col-md-1" *ngIf="siteMap['sesion']"></div>
+    <div class="row col-md-3" *ngIf="siteMap['sesion']">
+      <div class="card contenido titulo col-md-12">Sesión</div>
+      <div class="col-md-12" *ngFor="let page of siteMap['sesion']">
+        <a class="link" [href]="page[1]">
+          <div class="card contenido sesion">{{ page[0] }}</div>
+        </a>
+      </div>
+    </div>
+    <div class="col-md-1" *ngIf="siteMap['administracion']"></div>
+    <div class="row col-md-3" *ngIf="siteMap['administracion']">
+      <div class="card contenido titulo col-md-12">Administración</div>
+      <div class="col-md-12" *ngFor="let page of siteMap['administracion']">
+        <a class="link" [href]="page[1]">
+          <div class="card contenido administracion">{{ page[0] }}</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+  
+<app-footer></app-footer>

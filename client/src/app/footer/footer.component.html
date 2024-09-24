@@ -1,0 +1,122 @@
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Conéctate con nosotros a través de redes sociales:</span>
+      </div>
+      <!-- Left -->
+  
+      <!-- Right -->
+      <div>
+        <a href="https://www.facebook.com/profile.php?id=61557031150058" class="me-4 text-reset">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://twitter.com/CronoJobs86705" class="me-4 text-reset">
+            <i class="fa-brands fa-square-x-twitter"></i>
+        </a>
+        <a href="https://www.instagram.com/cronojobs/" class="me-4 text-reset">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/channel/UCahggse8A5NyLARE-krdg2A" class="me-4 text-reset">
+          <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="https://www.tiktok.com/@cronojobs?lang=es" class="me-4 text-reset">
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+  
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+                <a href="/">
+                    <img class="logo" src="../../assets/logo.png" alt="CronoJobs">
+                </a>
+            </h6>
+            <p>
+              Los mejores organizando tus proyectos, actividades y tu tiempo.
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Información
+            </h6>
+            <p>
+              <a href="/politica-privacidad" class="text-reset">Política de Privacidad</a>
+            </p>
+            <p>
+              <a href="/mapa-del-sitio" class="text-reset">Mapa del Sitio</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Enlaces
+            </h6>
+            <p>
+              <a href="/" class="text-reset">Inicio</a>
+            </p>
+            <p *ngIf="rol != 4 && rol !=3 && rol != null">
+              <a href="/equipos-areas" class="text-reset">Equipos/Áreas</a>
+            </p>
+            <p *ngIf="rol != 4 && rol != null">
+              <a href="/usuarios" class="text-reset">Empleados</a>
+            </p>
+            <p *ngIf="rol != null">
+                <a href="/proyectos" class="text-reset">Proyectos</a>
+            </p>
+            <p *ngIf="rol == 3 || rol == 4">
+              <a href="/notificaciones" class="text-reset">Notificaciones</a>
+            </p>
+            <p *ngIf="rol == null">
+                <a href="/login" class="text-reset">Inicio de Sesión</a>
+            </p>
+            <p *ngIf="rol == null">
+                <a href="/registro-empresa" class="text-reset">Registro de Empresa</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Contacto</h6>
+            <p><i class="fas fa-home me-3"></i> Dolores Hidalgo, Gto, MX.</p>
+            <p>
+              <i class="fas fa-envelope me-3"></i>
+              almotors666@gmail.com
+            </p>
+            <p><i class="fas fa-phone me-3"></i> + 55 418 112 1719</p>
+            <p><i class="fas fa-phone me-3"></i> + 55 418 144 6580</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+  
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2024 Copyright: <strong>CronoJobs</strong>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->

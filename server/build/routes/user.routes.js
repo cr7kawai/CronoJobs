@@ -11,12 +11,12 @@ class UserRoutes {
         this.config();
     }
     config() {
-        this.router.get('/', user_controller_1.default.obtenerUsuarios);
+        this.router.get('/empresa/:id_empresa', user_controller_1.default.obtenerUsuarios);
         this.router.get('/rol/', user_controller_1.default.obtenerRoles);
         this.router.get('/area/', user_controller_1.default.obtenerAreas);
         this.router.get('/:id_user', user_controller_1.default.verUsuario);
         this.router.get('/obtener/:id_user', user_controller_1.default.obtenerUsuario);
-        this.router.get('/area/:id_area', user_controller_1.default.obtenerUsuariosArea);
+        this.router.get('/area/:id_area/:id_empresa', user_controller_1.default.obtenerUsuariosArea);
         this.router.post('/', user_controller_1.default.registrarUsuario);
         this.router.put('/:id_user', user_controller_1.default.modificarUsuario);
         this.router.delete('/:id_user', user_controller_1.default.eliminarUsuario);
@@ -24,6 +24,7 @@ class UserRoutes {
         this.router.post('/login', user_controller_1.default.login);
         this.router.post('/notificacion/', user_controller_1.default.enviarNotificacion);
         this.router.get('/notificacion/:id_user', user_controller_1.default.obtenerNotificaciones);
+        this.router.post('/validarEmailTel/', user_controller_1.default.validarTelefonoEmail);
     }
 }
 const userRoutes = new UserRoutes();

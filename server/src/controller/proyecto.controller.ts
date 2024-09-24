@@ -5,7 +5,10 @@ import pool from '../connection';
 class ProyectoController{
 
     public async obtenerProyectos (req: Request, res: Response){
-      const proyectos = await pool.query('SELECT pk_proyecto, p.nombre, descripcion, fecha_inicio, fecha_fin, CASE estado WHEN 0 THEN "Pendiente" WHEN 1 THEN "Realizado" END AS estado, fecha_termino, a.nombre as area FROM proyecto as p INNER JOIN area as a on pk_area = fk_area  order by fecha_termino asc');
+      const { id_empresa } = req.params;
+      const proyectos = await pool.query('SELECT pk_proyecto, p.nombre, descripcion, fecha_inicio, fecha_fin, CASE p.estado WHEN 0 THEN "Pendiente" WHEN 1 THEN "Realizado" END AS estado, fecha_termino, a.nombre as area FROM proyecto as p INNER JOIN area as a on a.pk_area = p.fk_area INNER JOIN empresa as e on e.pk_empresa = a.fk_empresa WHERE e.pk_empresa = ? order by fecha_termino asc',
+        [id_empresa]
+      );
       res.json(proyectos);
     }
 

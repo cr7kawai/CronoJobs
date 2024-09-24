@@ -1,93 +1,493 @@
-.card{
-    margin: 20px;
+.card {
+  margin: 20px;
+}
+
+.card-title {
+  padding-left: 25px;
+  padding-right: 50px;
 }
 
 .search-input {
-    width: 96%;
-    height: 75px;
-    margin-bottom: -30px;
-    margin-left: 25px;
-    margin-top: 25px;
-    margin-right: 25px;
+  width: 100%;
+  height: 75px;
+  margin-bottom: -30px;
+  margin-top: 25px;
 }
 
-.agregar{
-    height: 53px;
-    margin-top: 25px;
+.agregar {
+  height: 53px;
+  margin-top: 25px;
 }
 
-td, th{
-    flex: 1;
-    min-height: 55px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+td,
+th {
+  flex: 1;
+  min-height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .mat-column-Acciones {
-    flex: 1.5;
-}
-  
-
-th{
-    color: #020061;
+  flex: 1.5;
 }
 
-button, a{
-    margin-left: 5px;
+th {
+  color: #020061;
+}
+
+button,
+a {
+  margin-left: 5px;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Color de fondo oscuro y opacidad */
-    z-index: 9999; /* Z-index alto para cubrir todo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Color de fondo oscuro y opacidad */
+  z-index: 9999; /* Z-index alto para cubrir todo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-mat-dialog-content{
-    background-color: #FFF;
-    padding: 20px;
+mat-dialog-content {
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px;
 }
 
 .form-title {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.row{
-    margin-bottom: 5px;
+.row {
+  margin-bottom: 5px;
 }
 
-.linea{
-    display: inline-block;
+.linea {
+  display: inline-block;
 }
 
-label{
-    color: #020061;
+label {
+  color: #020061;
 }
 
 .texto:focus {
-    border: 1px solid #020061;
-    box-shadow: 0 0 5px #020061;
+  border: 1px solid #020061;
+  box-shadow: 0 0 5px #020061;
 }
 
-select:focus{
-    border: 1px solid #020061;
-    box-shadow: 0 0 5px #020061;
+select:focus {
+  border: 1px solid #020061;
+  box-shadow: 0 0 5px #020061;
 }
-  
+
 .btn-large {
-    margin-top: 15px;
-    width: 100px;
+  margin-top: 20px;
+  width: 100px;
 }
 
-.guardar{
-    margin-left: 20px;
+.guardar {
+  margin-left: 20px;
+}
+
+/* ------------------
+    Responsive CSS
+--------------------*/
+
+@media (max-width: 1200px) {
+  .search-input {
+    width: 96%;
+  }
+}
+
+@media (max-width: 992px) {
+  .card-title {
+    padding-right: 30px;
+  }
+
+  .search-input {
+    width: 95%;
+  }
+}
+
+@media (max-width: 1300px) {
+  .table-container {
+    max-width: 1500px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  mat-table {
+    min-width: 1300px;
+    width: max-content;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 767px) {
+  .card-title {
+    padding-right: 25px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+
+.overlay-notas {
+  /* Establece un tamaño fijo para el modal */
+  width: 50%; /* o el ancho que prefieras */
+  height: 70%; /* o la altura que prefieras */
+  overflow-y: auto; /* Asegura que el contenido pueda desplazarse verticalmente */
+  position: fixed; /* Fija el modal sobre el contenido de la página */
+  top: 50%; /* Posiciona el modal en el centro de la ventana */
+  left: 50%; /* Posiciona el modal en el centro de la ventana */
+  transform: translate(-50%, -50%); /* Centra el modal perfectamente */
+  background-color: white; /* Fondo blanco para el contenido del modal */
+  padding: 0px; /* Añade algo de espacio dentro del modal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Una sombra suave para resaltar el modal */
+  z-index: 1000; /* Asegura que el modal esté sobre otros elementos */
+  border-radius: 5px; /* Bordes redondeados para un aspecto más suave */
+}
+
+.modal-notas-content {
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh; /* Ajusta la altura del modal según sea necesario */
+}
+
+.modal-notas-header h1 {
+  margin: 0; /* Elimina márgenes predeterminados */
+  padding: 16px 20px; /* Espacio interior adecuado */
+  white-space: nowrap; /* Evita que el título se ajuste a la línea siguiente */
+  overflow: hidden; /* Esconde cualquier desbordamiento de texto */
+  text-overflow: ellipsis; /* Añade '...' si el texto es demasiado largo */
+}
+
+.modal-form-titulo,
+.modal-form-prioridad,
+.modal-form-descripcion {
+  display: block; /* Hace que cada campo ocupe su propia línea */
+  width: 100%; /* Cada campo ocupa el ancho completo del contenedor */
+  margin-bottom: 1em; /* Espacio entre campos */
+}
+
+/*Inicia color de cards para notas */
+.prioridad-alta {
+  background-color: #02033a; /* Azul oscuro para alta prioridad */
+  width: 90%; /* O un tamaño específico más pequeño que el actual */
+  margin: 5px auto; /* Centrar y proporcionar un pequeño margen */
+}
+
+.prioridad-media {
+  background-color: #2f4b7c; /* Azul intermedio para prioridad media */
+  width: 90%; /* O un tamaño específico más pequeño que el actual */
+  margin: 5px auto; /* Centrar y proporcionar un pequeño margen */
+}
+
+.prioridad-baja {
+  background-color: #a5c8e1; /* Azul claro para baja prioridad */
+  width: 90%; /* O un tamaño específico más pequeño que el actual */
+  margin: 5px auto; /* Centrar y proporcionar un pequeño margen */
+}
+
+/* Estilo genérico para la tarjeta, aplicable a todas */
+.card-prioridad {
+  color: #ffffff; /* Texto blanco para contraste */
+  padding: 10px; /* Reducir el padding */
+}
+/*Termina color de cards para notas */
+
+@media (min-width: 768px) {
+  /* Ajusta para dispositivos medianos y grandes */
+  .modal-form-titulo,
+  .modal-form-prioridad {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .modal-form-descripcion {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.notas-container {
+  max-height: 300px; /* Ajusta este valor según tus necesidades */
+  overflow-y: auto; /* Esto permitirá el desplazamiento vertical si el contenido excede la altura máxima */
+  overflow-x: hidden; /* Esto evitará el desplazamiento horizontal */
+}
+
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end; /* Alinea los elementos de formulario verticalmente */
+}
+
+.form-group .form-row {
+  flex-basis: 100%; /* Asegúrate de que .form-row ocupe el ancho completo */
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.form-group .form-row .col {
+  flex: 1; /* Los hijos de .form-row ocuparán un espacio igual */
+  padding: 0 15px; /* Espaciado entre los inputs, ajusta según sea necesario */
+}
+
+@media (max-width: 768px) {
+  .form-group .form-row .col {
+    flex-basis: 100%; /* En pantallas pequeñas, cada .col ocupará el ancho completo */
+  }
+}
+
+.nota-header {
+  margin-top: 20px; /* Espaciado superior para separar del contenido anterior */
+  padding: 10px 0; /* Espaciado interno arriba y abajo */
+  border-top: 1px solid #dee2e6; /* Un borde superior como separador */
+}
+
+.nota-title {
+  margin-top: 10px; /* Espaciado adicional si es necesario */
+  font-size: 1.5rem; /* Tamaño del título */
+  color: #333; /* Color del texto */
+  text-align: left; /* Alineación del texto */
+}
+
+.modal-notas-footer .row {
+  justify-content: center; /* Centra los botones horizontalmente */
+}
+
+.modal-notas-footer .btn-large {
+  margin: 10px auto; /* Añade un margen automático para centrar los botones */
+  width: auto; /* Asegura que el ancho del botón se ajuste al contenido */
+}
+
+/* Estilos de botones con espaciado */
+.modal-notas-footer .btn {
+  margin: 10px; /* Añade un margen alrededor de los botones */
+}
+
+/* Alternativamente, si solo quieres espacio entre los botones y no alrededor, podrías hacer esto: */
+.modal-notas-footer .btn:not(:last-child) {
+  margin-right: 10px; /* Añade margen a la derecha de cada botón excepto el último */
+}
+
+/* O si prefieres agregar el margen solo entre dos botones específicos, podrías asignar una clase extra al primer botón */
+.btn-agregar {
+  margin-right: 10px; /* Añade margen a la derecha del botón de Agregar */
+}
+
+/* INICIO ESTILOS MODAL DETALLES DEL PROYECTO */
+.overlay-detalle-proyecto {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-detalle-content {
+  background-color: #fff;
+  width: 60%; /* Ajusta el ancho del modal a tus necesidades */
+  max-height: 80%; /* Altura máxima con desplazamiento */
+  overflow-y: auto; /* Permite desplazarse verticalmente si el contenido es muy largo */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  position: relative; /* Para posicionar correctamente el botón de cerrar */
+}
+
+.modal-detalle-header {
+  padding: 10px 0;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-detalle-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.modal-detalle-header .close {
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-detalle-body {
+  padding: 20px;
+}
+
+.modal-detalle-footer {
+  border-top: 1px solid #dee2e6;
+  padding: 10px 0;
+  text-align: right;
+}
+
+.modal-detalle-footer button {
+  padding: 5px 15px;
+  margin-left: 10px;
+}
+/* FIN ESTILOS MODAL DETALLES DEL PROYECTO */
+
+/* Estilos para la card de detalles del proyecto */
+.card-detalle-proyecto {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 20px auto;
+  max-width: 500px; /* Ajusta esta medida a tu diseño */
+}
+
+.card-detalle-proyecto-header {
+  padding: 10px 15px;
+  background-color: #007bff; /* Color de cabecera por defecto */
+  color: #fff;
+  text-align: left;
+}
+
+.card-detalle-proyecto-header.estado-pendiente {
+  background-color: #ffc107; /* Color amarillo para estado 'pendiente' */
+}
+
+.card-detalle-proyecto-header.estado-en-progreso {
+  background-color: #17a2b8; /* Color azul para estado 'en progreso' */
+}
+
+.card-detalle-proyecto-header.estado-completado {
+  background-color: #28a745; /* Color verde para estado 'completado' */
+}
+
+.card-detalle-proyecto-body {
+  padding: 15px;
+  color: #333;
+}
+
+.card-detalle-proyecto-footer {
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  text-align: right;
+}
+
+.card-detalle-proyecto-footer button {
+  padding: 5px 15px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.card-detalle-proyecto-footer button:hover {
+  background-color: #0056b3;
+}
+
+/* Utiliza este estilo si el estado es 'completado' */
+.card-detalle-completado {
+  border-left: 4px solid #28a745;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente (opcional) */
+  padding: 10px; /* Añade un poco de espacio interior */
+}
+
+.disabled-button {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Estilos para el título y las migas de pan */
+.breadcrumb-container {
+  background-color: #5c4d7d; /* Un morado claro, acorde con la paleta de colores del sitio */
+  padding: 10px 20px; /* Espacio interno para no pegar el texto a los bordes */
+  color: white; /* Texto en blanco para mejor contraste */
+  display: flex;
+  justify-content: space-between; /* Espacio entre el título y las migas de pan */
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Una sombra suave */
+}
+
+.titulo-pagina {
+  font-size: 24px; /* Tamaño grande para el título de la página */
+  font-weight: bold; /* Negrita para que resalte */
+}
+
+.breadcrumb {
+  font-size: 16px; /* Un tamaño menor para las migas de pan */
+}
+
+.breadcrumb-link {
+  color: #dcdcdc; /* Un gris claro para los enlaces, puedes ajustar el color */
+  text-decoration: none; /* Elimina el subrayado de los enlaces */
+}
+
+.breadcrumb-link:hover {
+  color: #ffffff; /* Un blanco para cuando se pasa el mouse sobre el enlace */
+  text-decoration: underline; /* Subraya el enlace al pasar el mouse */
+}
+
+/* Estilos para la sección actual de las migas de pan */
+.breadcrumb-current {
+  color: #a6a6d9; /* Un color morado más claro que indica la página actual */
+  font-weight: bold; /* Negrita para destacar */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Aplicar animación al título */
+.page-title {
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Aplicar animación a las migas de pan */
+.breadcrumb {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Zoom-in animation */
+@keyframes zoomIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Aplicar animación al título */
+.page-title {
+  animation: zoomIn 1s ease-in-out forwards;
 }

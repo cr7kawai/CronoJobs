@@ -1,3 +1,73 @@
-.logo{
-    height: 35px;
+.logo {
+  height: 35px;
+}
+
+.nav-link.active-link {
+  color: #800080; /* Morado */
+  font-weight: bold; /* Negrita */
+}
+
+.nav-link:hover {
+  color: #800080; /* Este es el código de color para morado */
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.nav-link {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #800080; /* Morado */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(128, 0, 128, 0.1); /* Morado claro */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nombre-link{
+  display: block;
+  padding-top: 0.5rem;
+  padding-right: 0.4rem;
+  padding-left: 0.4rem;
+  text-decoration: none;
+  color: #6c757d;
+}
+
+.buscador{
+  margin-right: 4px;
+}
+
+@media (max-width: 991px){
+  .nombre-link{
+    padding-left: 0rem;
+  }
+  .buscador{
+    margin-right: 0px;
+  }
 }

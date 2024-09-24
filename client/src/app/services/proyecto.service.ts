@@ -12,8 +12,8 @@ export class ProyectoService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerProyectos() {
-    return this.http.get(`${this.API_URI}/`);
+  obtenerProyectos(id_empresa: any) {
+    return this.http.get(`${this.API_URI}/empresa/${id_empresa}`);
   }
 
   verProyecto(id_proyecto: any) {

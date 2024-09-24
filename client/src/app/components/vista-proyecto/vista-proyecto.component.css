@@ -13,6 +13,14 @@ h1{
     font-size: 18px;
 }
 
+.ver-actividades{
+    text-align: end;
+}
+
+.culminar{
+    text-align: start;
+}
+
 strong{
     color: #020061;
 }
@@ -86,4 +94,19 @@ select:focus{
 
 .guardar{
     margin-left: 20px;
+}
+
+/* ------------------
+    Responsive CSS
+--------------------*/
+
+@media (max-width: 768px) {
+    .ver-actividades{
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .culminar{
+        text-align: center;
+    }
 }

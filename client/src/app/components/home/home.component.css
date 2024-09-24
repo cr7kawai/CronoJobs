@@ -1,0 +1,599 @@
+/* Contenedor principal para el layout */
+.main-content {
+  display: flex;
+  justify-content: space-between; /* Distribuir el espacio entre elementos */
+  align-items: center; /* Centrar elementos verticalmente */
+  padding: 1.5rem; /* Añadir algo de padding */
+  color: #ffffff; /* Establece el color del texto para todos los elementos dentro de main-content */
+  height: auto; /* Cambia 100vh a auto para permitir más contenido */
+}
+
+.content-text h1,
+.content-text p,
+.content-text a {
+  color: #ffffff; /* Esto cambiará el color del texto a blanco para h1, p y a */
+}
+
+/* Estilos para el botón, si deseas que este también sea blanco */
+.content-text a.c-button.v--secondary {
+  background-color: #000; /* Color de fondo negro para el botón */
+  color: #ffffff; /* Texto blanco para el botón */
+  border: 2px solid #ffffff; /* Borde blanco para el botón, si es necesario */
+}
+
+/* Opcional: Puedes querer agregar :hover y :focus estilos para el botón */
+.content-text a.c-button.v--secondary:hover,
+.content-text a.c-button.v--secondary:focus {
+  background-color: #333; /* Color de fondo más claro para el botón al pasar el ratón */
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Ajusta el footer para que se quede al final */
+app-footer {
+  margin-top: auto;
+}
+.social-media-links {
+  display: flex;
+  align-items: center; /* Centra los íconos verticalmente */
+  font-size: 25px; /* Aumenta el tamaño del texto, que afecta a los íconos de Font Awesome */
+  width: auto; /* Permite que los íconos ocupen solo el espacio necesario */
+  margin-top: 0; /* Remueve el margen superior */
+  justify-content: flex-start; /* Alinea íconos a la izquierda */
+}
+
+/* Para aumentar el tamaño de los íconos específicamente y darles un poco más de espacio */
+.social-media-links i {
+  margin: 1 15px; /* Añade margen horizontal a los íconos para más espacio */
+  color: inherit; /* Usa el color heredado de la clase o elemento padre */
+}
+
+/* Estilos para las tarjetas */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 1rem; /* Asegura que haya espacio debajo de cada tarjeta */
+  /* Otras propiedades de la tarjeta */
+}
+
+/* Asegura que cada tarjeta tenga la misma flexibilidad y el mismo margen */
+.col-md-4 {
+  display: flex;
+  flex: 1;
+  padding: 15px; /* Ajusta el padding según sea necesario */
+}
+
+.card-title {
+  text-align: center;
+  margin-top: auto; /* Empuja el título hacia arriba si no hay otros elementos arriba */
+}
+
+/* Si necesitas que el padding sea responsivo y se ajuste en pantallas más pequeñas, podrías hacer */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-color: #8a2be2;
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  z-index: 0;
+  opacity: 0;
+}
+
+.card:hover:before {
+  top: 0;
+  left: 0;
+  opacity: 0.2;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.social-media-links i {
+  animation: pulse 2s infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.card-img-top {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+}
+
+.card-title {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 0.15em solid white; /* Simula el cursor de tipeo */
+  white-space: nowrap; /* Asegura que el texto no se envuelva */
+  margin: 0 auto; /* Para centrar el título si su contenedor tiene display: flex */
+  letter-spacing: 0.15em; /* Ajusta el espaciado de las letras */
+  animation: typing 6s steps(30, end) infinite,
+    /* Ajusta el tiempo total para incluir tiempo de espera */ blink-caret 0.75s
+      step-end infinite;
+  margin-bottom: 0.5rem; /* Reduce el margen inferior del título */
+}
+
+/* Añade una transición suave para el cambio de tamaño de la tarjeta al pasar el mouse */
+.card:hover {
+  transform: scale(1.05); /* Hace la tarjeta un poco más grande */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+}
+
+/* Ajustes adicionales para el responsive */
+@media (max-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 100%; /* Las tarjetas toman todo el ancho en móviles */
+    margin: 10px 0; /* Añade margen superior e inferior para móviles */
+  }
+  .card {
+    height: auto; /* La altura puede variar en móviles para adaptarse al contenido */
+  }
+}
+
+/* Para el contenedor principal */
+.container {
+  max-width: 1200px; /* Ajusta al ancho máximo deseado */
+  margin: auto; /* Centra el contenedor en la página */
+  padding: 1rem; /* Añade padding alrededor del contenedor para evitar que toque los bordes de la pantalla */
+}
+
+/* Para las filas y las columnas dentro del contenedor */
+.row {
+  display: flex;
+  justify-content: center; /* Centra las tarjetas horizontalmente */
+  flex-wrap: wrap; /* Permite que las tarjetas se envuelvan en la pantalla si no hay espacio suficiente */
+}
+
+/* Para las tarjetas individuales */
+.col-md-4 {
+  flex: 1; /* Permite que las tarjetas crezcan y llenen el espacio */
+  max-width: calc(
+    33.333% - 2rem
+  ); /* Toma un tercio del contenedor y resta el margen total entre tarjetas */
+  margin: 1rem; /* Añade margen alrededor de las tarjetas */
+}
+
+/* Remueve el margen superior de los textos para que sigan inmediatamente después de los títulos */
+.card-text {
+  text-align: justify;
+  text-justify: inter-word;
+  font-size: 1rem; /* O el tamaño que prefieras */
+  margin: 1rem;
+}
+
+/* Opcionalmente, si los elementos anteriores a `.card-text` son dinámicos, puedes establecer un 'margin-top' específico */
+.card-body > *:first-child {
+  margin-top: 0; /* Remueve el margen superior del primer elemento dentro de .card-body */
+}
+
+/* Establece una altura fija para las imágenes para que sean uniformes */
+.card-img-top {
+  height: 180px; /* Ajusta esto al tamaño de tus imágenes */
+  width: 100%;
+  object-fit: contain; /* Esto asegurará que las imágenes cubran completamente su contenedor sin perder su aspecto */
+  margin-bottom: 1rem; /* Esto dará espacio entre la imagen y el título */
+}
+
+/* Utiliza flexbox para alinear los elementos internos de la tarjeta */
+.card-body {
+  display: flex;
+  flex-direction: column; /* Organiza los elementos verticalmente */
+  justify-content: flex-start; /* Alinea el contenido al principio del contenedor */
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column-reverse;
+  }
+
+  .c-billboard,
+  .content-text {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .col-md-4 {
+    /* Hace que cada tarjeta ocupe el 100% del ancho de su contenedor */
+    flex: 0 0 100%;
+    max-width: 60%; /* asegura que no tenga un ancho máximo */
+    margin: 10px 0; /* ajusta el margen como sea necesario */
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: row; /* Cambia a disposición de fila */
+    justify-content: space-between; /* Espacio entre texto e imagen */
+    align-items: flex-start; /* Alinea elementos al inicio */
+  }
+
+  .content-text {
+    width: auto; /* Permite que el texto ocupe solo el espacio necesario */
+    margin-right: 1px; /* Añade margen entre el texto y la imagen */
+    font-size: 0.8rem; /* Hace el texto un poco más pequeño */
+  }
+
+  .c-billboard {
+    width: 50%; /* Ajusta el ancho del contenedor del GIF */
+    margin-top: 0; /* Remueve el margen superior si es necesario */
+  }
+
+  .c-billboard img {
+    width: 100%; /* Asegura que el GIF ocupe todo el contenedor */
+    height: auto; /* Mantiene la proporción del GIF */
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    /* Reducir el tamaño de las tarjetas */
+    margin: 0.1rem;
+    padding: 0.1rem;
+  }
+
+  .col-md-4 {
+    /* Establecer un máximo de ancho para las tarjetas */
+    flex: 0 0 80%; /* Ajustar para que las tarjetas sean un poco más pequeñas */
+    max-width: 80%; /* Puedes ajustar este valor como mejor te parezca */
+    margin: 0.5rem auto; /* Añadir margen arriba y abajo y centrar las tarjetas */
+  }
+
+  .card-img-top {
+    max-width: 350px; /* Cambiar a auto si quieres mantener la proporción */
+    height: auto; /* Reducir el ancho si es necesario */
+  }
+  .card-body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card-title,
+  .card-text {
+    /* Ajustar el tamaño del texto dentro de las tarjetas */
+    font-size: 0.9rem; /* Haz el texto más pequeño */
+  }
+
+  .card-text {
+    /* Reducir el tamaño del texto */
+    font-size: 0.8rem; /* Ajustar según necesidad */
+  }
+}
+
+@media (orientation: portrait) {
+  /* Ajustes para pantallas con orientación vertical */
+  .main-content {
+    flex-direction: column; /* Apila los elementos en columna */
+    align-items: center; /* Centra los elementos horizontalmente */
+    text-align: center; /* Centra el texto horizontalmente */
+  }
+
+  .c-billboard,
+  .content-text {
+    width: 100%; /* Ajusta el ancho al 100% para ocupar el espacio disponible */
+    margin-right: 0; /* Asegúrate de que no haya margen a la derecha */
+  }
+
+  .c-billboard {
+    order: 2; /* Asegúrate de que el GIF aparezca después de los iconos de redes sociales */
+  }
+
+  .content-text {
+    order: 1; /* El texto debe aparecer antes del GIF */
+  }
+
+  .social-media-links {
+    justify-content: center; /* Centra los iconos de redes sociales */
+    margin-top: 1rem; /* Añade espacio arriba de los iconos */
+    margin-bottom: 1rem; /* Añade espacio debajo de los iconos */
+  }
+  .c-billboard img {
+    width: 80%; /* Ajusta el ancho del GIF si es necesario */
+    height: auto; /* Para mantener la relación de aspecto del GIF */
+    margin-bottom: 1rem; /* Añade espacio debajo del GIF */
+  }
+}
+/* Estilos modificados para la tarjeta contenedora */
+.container-card {
+  width: 90%; /* Reduce el ancho de la tarjeta */
+  margin: 2rem auto; /* Mantiene el margen arriba y abajo, y centra la tarjeta */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Mantiene la sombra suave */
+}
+
+.container-card .card-title {
+  text-align: center; /* Centra el título */
+}
+
+.conocenos-title {
+  padding: 1.5rem 0; /* Ajusta el padding superior e inferior */
+  color: #ffffff; /* Asegura que el color sea blanco, aunque ya está especificado en línea */
+  text-align: center; /* Centra el texto, si es necesario */
+}
+
+.main-content {
+  margin-bottom: 0; /* Elimina el margen inferior */
+}
+
+/* Ajusta el margen superior de la primera fila de tarjetas */
+.row.mb-3:first-child {
+  margin-top: 0;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+.price {
+  display: inline-block; /* Necesario para permitir la transformación */
+  animation: bounce 2s infinite; /* Ajusta la duración y repeticiones según prefieras */
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.pricing-card {
+  background-color: #ffffff;
+  border-radius: 20px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  width: 300px; /* Aumenta el ancho para más 'regordete' */
+  margin: 4rem auto; /* Centrado con margen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem; /* Aumento de padding para más 'cuerpo' */
+  position: relative;
+  min-height: 400px; /* Aumenta la altura mínima para más 'cuerpo' */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-header {
+  width: 120px; /* Aumenta el tamaño para equilibrar */
+  height: 120px; /* Aumenta el tamaño para equilibrar */
+  border-radius: 50%; /* Mantiene la forma circular */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -60px; /* Ajuste para mantener la posición adecuada */
+  left: calc(50% - 60px); /* Ajuste para mantener la posición adecuada */
+  flex-direction: column;
+}
+
+.pricing-header.basic {
+  background-color: #4169e1; /* Color azul para el plan básico */
+}
+
+.pricing-header.standard {
+  background-color: #4169e1; /* Color verde para el plan estándar */
+}
+
+.pricing-header.premium {
+  background-color: #4169e1; /* Color rojo para el plan premium */
+}
+
+.price-tag {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-top: 0px; /* Espacio entre el título del plan y el precio */
+}
+
+.buy-now {
+  background-color: #4169e1; /* Un morado vibrante */
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: auto; /* Para asegurar que el botón esté al final de la tarjeta */
+  width: 80%; /* O el ancho que prefieras */
+  transition: background-color 0.5s; /* Efecto suave al cambiar de color */
+}
+
+.buy-now:hover {
+  background-color: #4169e1b0; /* Un morado ligeramente más oscuro para el efecto hover */
+}
+
+/* Lista de características */
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin-top: 0rem; /* Espacio para que la lista comience debajo del círculo del encabezado */
+}
+
+.plan-features li {
+  margin: 10px 0;
+  /* Agregar los íconos de check o cruz antes de cada elemento */
+}
+
+.plan-title {
+  font-size: 1em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.buy-now {
+  /* ... tus estilos existentes para .buy-now ... */
+  padding: 15px 20px; /* Aumenta el padding para un botón más grande */
+  margin-top: auto; /* Asegura que el botón esté en la parte inferior */
+}
+
+/* Ajustes para los precios */
+
+/* Ajustes para el título del plan */
+.plan-title {
+  font-size: 1.2em; /* Aumenta el tamaño del texto */
+}
+
+/* Ajustes para la lista de características */
+.plan-features {
+  margin-top: 2.5rem; /* Ajusta según sea necesario para el nuevo tamaño del encabezado */
+}
+
+/* Definición de la animación de "respiración" */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Transición suave para el cambio de escala y sombra al pasar el mouse */
+.pricing-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Animación para la "pulsación" de la tarjeta */
+@keyframes pulse-card {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Aplicar la animación a las tarjetas de precios */
+.pricing-card {
+  /* ... otros estilos ... */
+  animation: pulse-card 2s infinite ease-in-out;
+}
+
+/* Asegúrate de que la animación no se ejecute al pasar el mouse para mantener la animación de hover */
+.pricing-card:hover {
+  animation: none;
+}
+
+/* Media queries para dispositivos con un ancho máximo de 768px (tablets y móviles) */
+@media (max-width: 768px) {
+  .pricing-card .plan-features li,
+  .pricing-card .price-tag,
+  .pricing-card .plan-title {
+    font-size: 0.9rem; /* Reduce el tamaño de la fuente para las listas, precio y título */
+  }
+  .card-container {
+    flex-direction: column; /* Cambia la disposición a una columna */
+    align-items: center; /* Centra las tarjetas horizontalmente */
+    padding: 20px 10px; /* Ajusta el padding si es necesario */
+  }
+
+  .pricing-card {
+    width: 80%; /* Permite que cada tarjeta ocupe todo el ancho del contenedor */
+    margin-bottom: 10px; /* Añade margen entre tarjetas */
+    margin: 0 auto 30px auto; /* Añade margen automático a los lados para centrar y espacio debajo de cada tarjeta */
+  }
+
+  .pricing-header {
+    position: relative; /* Cambia la posición para que no se sobreponga sobre la tarjeta en dispositivos más pequeños */
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+
+  /* Ajustes adicionales para la tipografía y botones si es necesario */
+  .plan-title,
+  .price-tag {
+    font-size: smaller; /* Ajusta el tamaño del texto para que se adapte mejor al nuevo tamaño de las tarjetas */
+  }
+
+  .buy-now {
+    width: auto; /* Ajusta el ancho del botón */
+    padding: 10px; /* Disminuye el padding para botones en pantallas más pequeñas */
+  }
+}
+
+/* Media queries para dispositivos con un ancho máximo de 480px (teléfonos móviles) */
+@media (max-width: 480px) {
+  .card-container {
+    padding: 15px 5px; /* Reduce el padding aún más para pantallas pequeñas */
+  }
+
+  /* Aquí puedes hacer más ajustes específicos para teléfonos móviles si es necesario */
+}
+
+/* Asegúrate de colocar estas reglas CSS después de todas las demás reglas de estilo de tus tarjetas para que estos cambios tengan prioridad en pantallas más pequeñas */
+
+a{
+  text-decoration: none;
+  text-align: center;
+}

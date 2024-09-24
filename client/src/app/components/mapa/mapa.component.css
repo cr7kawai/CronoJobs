@@ -1,0 +1,43 @@
+.card-principal{
+    margin: 30px;
+    padding: 20px;
+}
+
+.contenido{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    height: 60px;
+    color: #fff;
+}
+
+.home{
+    background-color: #541554; 
+}
+
+.titulo{
+    background-color: #003366;
+}
+
+.informacion, .administracion, .sesion{
+    background-color: #23698a;
+}
+
+.home:hover{
+    background-color: #5c265cec; 
+}
+
+.informacion:hover, .administracion:hover, .sesion:hover{
+    background-color: #23698ad0;
+}
+
+
+.link {
+    text-decoration: none;
+}
+
+.link:hover .card.contenido {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}

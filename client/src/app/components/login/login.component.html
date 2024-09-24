@@ -1,17 +1,24 @@
 <div class="background">
     <app-menu></app-menu>
+
+    <div class="breadcrumb-container">
+        <h1 class="page-title">Inicio de Sesión</h1>
+      
+        <div class="breadcrumb">
+          <a href="/" class="breadcrumb-link">Inicio</a>
+          /<span class="breadcrumb-current">Inicio de Sesión</span>
+        </div>
+    </div>
+
     <main>
     <div class="contenedor__todo">
         <div class="caja__trasera">
-            <div class="caja__trasera-login">
-                <h3>¿Ya tienes una cuenta?</h3>
-                <p>Inicia sesión para entrar en la página</p>
-                <button id="btn__iniciar-sesion"></button>
+            <div class=" col-4">
             </div>
             <div class="caja__trasera-register">
                 <br>
                 <h3>¿Aún no tienes una cuenta?</h3>
-                <p>Por favor solicita una en tu empresa.</p>
+                <p>Por favor solicita una en tu empresa o registra tu propia empresa <a href="/registro">aquí</a>.</p>
             </div>
         </div>
 
@@ -27,4 +34,7 @@
         </div>
     </div>
 </main>
+    <br>
+    <br>
+    <app-footer></app-footer>
 </div>

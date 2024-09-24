@@ -1,52 +1,53 @@
 .graf {
   display: flex;
-  align-items: center;
   justify-content: center;
-  border: 0px;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
 }
 
-.grafica{
-  width: 300px; 
+.grafica {
+  width: 300px;
 }
 
-.encabezado-graf{
+.encabezado-graf {
   margin-top: 20px;
 }
 
-.card{
-margin: 20px;
+.card {
+  margin: 20px;
 }
 
 .card-header {
-display: flex;
-justify-content: space-between;
-padding-left: 30px;
-padding-right: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
-.title, .total {
-flex: 1;
+.title,
+.total {
+  flex: 1;
 }
 
 .title {
-text-align: left;
+  text-align: left;
 }
 
 .total {
-text-align: right;
+  text-align: right;
 }
 
-
-.success{
-background-color: #7CDA74;
+.success {
+  background-color: #7cda74;
 }
 
-.warning{
-background-color: #FCFC97;
+.warning {
+  background-color: #fcfc97;
 }
 
-.danger{
-background-color: #F58D87;
+.danger {
+  background-color: #f58d87;
 }
 
 .search-input {
@@ -54,17 +55,18 @@ background-color: #F58D87;
   height: 75px;
 }
 
-td, th{
-flex: 1;
-min-height: 55px;
-display: flex;
-align-items: center;
-justify-content: center;
-text-align: center;
+td,
+th {
+  flex: 1;
+  min-height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-th{
-color: #000;
+th {
+  color: #000;
 }
 
 .overlay {
@@ -80,9 +82,10 @@ color: #000;
   align-items: center;
 }
 
-mat-dialog-content{
-  background-color: #FFF;
+mat-dialog-content {
+  background-color: #fff;
   padding: 20px;
+  margin: 20px;
 }
 
 .form-title {
@@ -90,11 +93,11 @@ mat-dialog-content{
   margin-bottom: 20px;
 }
 
-.row{
+.row {
   margin-bottom: 5px;
 }
 
-label{
+label {
   color: #020061;
 }
 
@@ -103,7 +106,7 @@ label{
   box-shadow: 0 0 5px #020061;
 }
 
-select:focus{
+select:focus {
   border: 1px solid #020061;
   box-shadow: 0 0 5px #020061;
 }
@@ -113,6 +116,112 @@ select:focus{
   width: 100px;
 }
 
-.guardar{
+.guardar {
   margin-left: 20px;
+}
+
+/* ------------------
+    Responsive CSS
+--------------------*/
+
+@media (max-width: 840px) {
+  .table-container {
+    max-width: 840px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  mat-table {
+    min-width: 800px;
+    width: max-content;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 800px) {
+  .card-body {
+    padding: 0px;
+  }
+}
+
+@media (max-width: 320px) {
+  .grafica {
+    width: 260px;
+  }
+}
+
+/* Estilos para el título y las migas de pan */
+.breadcrumb-container {
+  background-color: #5c4d7d; /* Un morado claro, acorde con la paleta de colores del sitio */
+  padding: 10px 20px; /* Espacio interno para no pegar el texto a los bordes */
+  color: white; /* Texto en blanco para mejor contraste */
+  display: flex;
+  justify-content: space-between; /* Espacio entre el título y las migas de pan */
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Una sombra suave */
+}
+
+.titulo-pagina {
+  font-size: 24px; /* Tamaño grande para el título de la página */
+  font-weight: bold; /* Negrita para que resalte */
+}
+
+.breadcrumb {
+  font-size: 16px; /* Un tamaño menor para las migas de pan */
+}
+
+.breadcrumb-link {
+  color: #dcdcdc; /* Un gris claro para los enlaces, puedes ajustar el color */
+  text-decoration: none; /* Elimina el subrayado de los enlaces */
+}
+
+.breadcrumb-link:hover {
+  color: #ffffff; /* Un blanco para cuando se pasa el mouse sobre el enlace */
+  text-decoration: underline; /* Subraya el enlace al pasar el mouse */
+}
+
+/* Estilos para la sección actual de las migas de pan */
+.breadcrumb-current {
+  color: #a6a6d9; /* Un color morado más claro que indica la página actual */
+  font-weight: bold; /* Negrita para destacar */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Aplicar animación al título */
+.page-title {
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Aplicar animación a las migas de pan */
+.breadcrumb {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Zoom-in animation */
+@keyframes zoomIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Aplicar animación al título */
+.page-title {
+  animation: zoomIn 1s ease-in-out forwards;
 }

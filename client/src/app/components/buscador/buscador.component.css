@@ -1,0 +1,60 @@
+.search-container {
+    position: relative;
+}
+
+.form-control{
+    color: #800080
+}
+
+.form-control:focus{
+    border: 1px solid #800080;
+    box-shadow: 0 0 8px #800080;
+}
+
+.search-results {
+position: absolute;
+top: calc(100% + 1px); /* Posición debajo del input */
+left: 5px;
+z-index: 1000; /* Para asegurarse de que esté por encima de otros elementos */
+background-color: white; /* Fondo blanco */
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+list-style-type: none; /* Quitar viñetas */
+padding: 0; /* Eliminar el relleno predeterminado */
+margin: 0; /* Eliminar el margen predeterminado */
+max-height: 200px; /* Altura máxima */
+overflow-y: auto; /* Desplazamiento vertical si hay demasiados elementos */
+width: 210px;
+}
+
+.search-results li {
+padding: 8px 12px; /* Relleno */
+cursor: pointer; /* Cambiar el cursor al pasar por encima */
+}
+
+.search-results li:hover {
+background-color: #e1a5f3; /* Color de fondo al pasar por encima */
+}
+
+@media (max-width: 991px){
+    .search-results{
+        width: 99%;
+    }
+}
+
+@media (max-width: 785px){
+    .search-results{
+        width: 98%;
+    }
+}
+
+@media (max-width: 500px){
+    .search-results{
+        width: 97%;
+    }
+}
+
+@media (max-width: 300px){
+    .search-results{
+        width: 96%;
+    }
+}

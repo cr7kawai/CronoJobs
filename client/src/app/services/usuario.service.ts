@@ -13,8 +13,8 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerUsuarios() {
-    return this.http.get(`${this.API_URI}/`);
+  obtenerUsuarios(id_empresa: any) {
+    return this.http.get(`${this.API_URI}/empresa/${id_empresa}`);
   }
 
   obtenerRoles() {
@@ -33,8 +33,8 @@ export class UsuarioService {
     return this.http.get(`${this.API_URI}/obtener/${id_user}`);
   }
 
-  obtenerUsuariosArea(id_area: any) {
-    return this.http.get(`${this.API_URI}/area/${id_area}`);
+  obtenerUsuariosArea(id_area: any, id_empresa: any) {
+    return this.http.get(`${this.API_URI}/area/${id_area}/${id_empresa}`);
   }
 
   registrarUsuario(usuario: Usuario) {
@@ -59,5 +59,9 @@ export class UsuarioService {
 
   obtenerNotificaciones(id_user: any) {
     return this.http.get(`${this.API_URI}/notificacion/${id_user}`);
+  }
+
+  validarEmailTel(usuario: Usuario) {
+    return this.http.post(`${this.API_URI}/validarEmailTel`, usuario);
   }
 }

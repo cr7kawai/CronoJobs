@@ -3,12 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActividadesComponent } from './actividades.component';
 
 describe('ActividadComponent', () => {
-  let component: ActividadComponent;
-  let fixture: ComponentFixture<ActividadComponent>;
+  let component: ActividadesComponent;
+  let fixture: ComponentFixture<ActividadesComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ActividadesComponent]
+      declarations: [ActividadesComponent],
     });
     fixture = TestBed.createComponent(ActividadesComponent);
     component = fixture.componentInstance;

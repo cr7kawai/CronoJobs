@@ -1,36 +1,90 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" href="/"><img class="logo" src="../../assets/logo.png" alt="No hay logo"></a>
-          </li>
-        </ul>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item" *ngIf="rol != 4 && rol != null">
-            <a class="nav-link active" href="/usuarios">Empleados</a>
-          </li>
-          <li class="nav-item" *ngIf="rol != null">
-            <a class="nav-link active" href="/proyectos">Proyectos</a>
-          </li>
-          <li class="nav-item" *ngIf="rol == 3 || rol == 4">
-            <a class="nav-link active" href="/notificaciones">Notificaciones</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item" *ngIf="usuario">
-            <a class="nav-link">{{usuario}}</a>
-          </li>
-          <li class="nav-item" *ngIf="usuario == null">
-            <a class="nav-link active" href="/login">Iniciar Sesión</a>
-          </li>
-          <li class="nav-item" *ngIf="usuario == null">
-            <a class="nav-link active" href="/registro">Registrar mi empresa</a>
-          </li>
-          <li class="nav-item" *ngIf="rol != null">
-            <a class="nav-link active" href="/" (click)="cerrarSesion()">Cerrar Sesión</a>
-          </li>
-        </ul>
-      </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <!-- Puedes añadir un logotipo aquí si lo deseas -->
+      <img class="logo" src="../../assets/logo.png" alt="No hay logo" />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item" *ngIf="rol != 4 && rol !=3 && rol != null">
+          <a
+            class="nav-link active"
+            href="/equipo-area"
+            routerLink="/equipo-area"
+            routerLinkActive="active-link"
+            >Equipos/Áreas</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="rol != 4 && rol != null">
+          <a
+            class="nav-link active"
+            href="/usuarios"
+            routerLink="/usuarios"
+            routerLinkActive="active-link"
+            >Empleados</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="rol != null">
+          <a
+            class="nav-link active"
+            href="/proyectos"
+            routerLink="/proyectos"
+            routerLinkActive="active-link"
+            >Proyectos</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="rol == 3 || rol == 4">
+          <a
+            class="nav-link active"
+            href="/notificaciones"
+            routerLink="/notificaciones"
+            routerLinkActive="active-link"
+            >Notificaciones</a
+          >
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item buscador">
+            <app-buscador></app-buscador>
+        </li>
+        <li class="nav-item" *ngIf="usuario">
+          <a class="nombre-link">{{ usuario }}</a>
+        </li>
+        <li class="nav-item" *ngIf="usuario == null">
+          <a
+            class="nav-link active"
+            href="/login"
+            routerLink="/login"
+            routerLinkActive="active-link"
+            >Iniciar Sesión</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="usuario == null">
+          <a
+            class="nav-link active"
+            href="/registro"
+            routerLink="/registro"
+            routerLinkActive="active-link"
+            >Registrar mi empresa</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="rol != null">
+          <a class="nav-link active" href="/" (click)="cerrarSesion()"
+            >Cerrar Sesión</a
+          >
+        </li>
+      </ul>
     </div>
-  </nav>  
+  </div>
+</nav>

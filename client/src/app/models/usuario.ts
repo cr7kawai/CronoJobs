@@ -7,7 +7,8 @@ export interface Usuario{
     password?: string,
     telefono?: string, 
     genero?: string,
-    fecha_nacimiento?: Date
-    fk_rol?: number
-    fk_area?: number
+    fecha_nacimiento?: Date,
+    fk_rol?: number,
+    fk_area?: number,
+    fk_empresa?: number,
 }
