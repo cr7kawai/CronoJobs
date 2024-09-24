@@ -9,257 +9,254 @@
     </div>
   </div>
 
-    <div class="card">
-        <mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="onStepSelectionChange($event)">
-            <!-- Paso 1: Captcha -->
-            <mat-step label="Valida que eres humano" [optional]="false" [editable]="false" [completed]="captchaDatos">
-              <div class="captcha-container">
-                <ngx-recaptcha2 #captchaElem
-                  [siteKey]="siteKey"
-                  (success)="handleCaptchaResponse($event,stepper)">
-                </ngx-recaptcha2> 
-              </div>
-            </mat-step>
+  <div class="card">
+      <mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="onStepSelectionChange($event)">
+          <!-- Paso 1: Captcha -->
+          <mat-step label="Valida que eres humano" [optional]="false" [editable]="false" [completed]="captchaDatos">
+            <div class="captcha-container">
+              <ngx-recaptcha2 #captchaElem
+                [siteKey]="siteKey"
+                (success)="handleCaptchaResponse($event,stepper)">
+              </ngx-recaptcha2> 
+            </div>
+          </mat-step>
 
-            <!-- Paso 2: Información de la empresa -->
-            <mat-step label="Información de la empresa" [optional]="false" [completed]="usuarioDatos">
-                <form class="centered-form">
-                    <div class="form-title text-center">
-                      <h2 style="color: #020061;">Información de la empresa</h2>
+          <!-- Paso 2: Información de la empresa -->
+          <mat-step label="Información de la empresa" [optional]="false" [completed]="usuarioDatos">
+              <form class="centered-form">
+                  <div class="form-title text-center">
+                    <h2 style="color: #020061;">Información de la empresa</h2>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label>Nombre de la empresa: </label>
+                      <input type="text" class="form-control texto" id="nombre-empresa" placeholder="CronoJobs" [(ngModel)]="empresa.nombre" [ngModelOptions]="{standalone: true}">
                     </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <label>Nombre de la empresa: </label>
-                        <input type="text" class="form-control texto" id="nombre-empresa" placeholder="CronoJobs" [(ngModel)]="empresa.nombre" [ngModelOptions]="{standalone: true}">
+                  </div>
+                  <div class="row dueno-empresa">
+                      <div class="text-center">
+                          <h5 style="color: #020061; margin-top: 15px;">Datos del responsable de la empresa</h5>
                       </div>
-                    </div>
-                    <div class="row dueno-empresa">
-                        <div class="text-center">
-                            <h5 style="color: #020061; margin-top: 15px;">Datos del responsable de la empresa</h5>
-                        </div>
-                        <div class="col-md-4">
-                          <label>Nombre(s): </label>
-                          <input type="text" class="form-control texto" id="nombre-dueno" placeholder="Juan David" [(ngModel)]="usuario.nombre" [ngModelOptions]="{standalone: true}">
-                        </div>
-                        <div class="col-md-4">
-                          <label>Apellido paterno: </label>
-                          <input type="text" class="form-control texto" id="apePaterno" placeholder="Santos" [(ngModel)]="usuario.ape_paterno" [ngModelOptions]="{standalone: true}">
-                        </div>
-                        <div class="col-md-4">
-                          <label>Apellido materno: </label>
-                          <input type="text" class="form-control texto" id="apeMaterno" placeholder="Silva" [(ngModel)]="usuario.ape_materno" [ngModelOptions]="{standalone: true}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                          <label>Género: </label>
-                          <select class="form-control select-arrow" name="genero" id="genero" [(ngModel)]="usuario.genero" [ngModelOptions]="{standalone: true}">
-                            <option value="Masculino">Masculino</option>
-                            <option value="Femenino">Femenino</option>
-                            <option value="Otro">Otro</option>
-                          </select>
-                        </div>
-                        <div class="col-md-6">
-                          <label>Fecha de nacimiento: </label>
-                          <input type="date" class="form-control texto" id="fecha_nacimiento" [(ngModel)]="usuario.fecha_nacimiento" [ngModelOptions]="{standalone: true}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                          <label>Correo electrónico: </label>
-                          <input type="email" class="form-control texto" id="email-dueno" placeholder="neysantos@gmail.com" [(ngModel)]="usuario.email" [ngModelOptions]="{standalone: true}">
-                        </div>
-                        <div class="col-md-4">
-                          <label>Teléfono: </label>
-                          <input type="tel" class="form-control texto" id="tel-dueno" placeholder="4181121718" [(ngModel)]="usuario.telefono" [ngModelOptions]="{standalone: true}">
-                        </div>
-                        <div class="col-md-4">
-                          <label>Contraseña: </label>
-                          <input type="password" class="form-control texto" id="password" placeholder="********" [(ngModel)]="usuario.password" [ngModelOptions]="{standalone: true}">
-                        </div>
-                    </div>
-                    <div class="row centered-buttons">
-                      <div class="col-md-12 text-center">
-                        <button mat-button  type="submit" class="btn siguiente btn-large" (click)="validarDatosEmpresa(stepper)">Siguiente</button>
+                      <div class="col-md-4">
+                        <label>Nombre(s): </label>
+                        <input type="text" class="form-control texto" id="nombre-dueno" placeholder="Juan David" [(ngModel)]="usuario.nombre" [ngModelOptions]="{standalone: true}">
                       </div>
-                    </div>
-                  </form>
-            </mat-step>
-            
-            <!-- Paso 3: Datos de dirección -->
-            <mat-step label="Datos de dirección" [completed]="empresaDatos">
-                <form class="centered-form">
-                    <div class="form-title text-center">
-                      <h2 style="color: #020061;">Dirección de la empresa</h2>
-                    </div>
-                    <div class="row">
+                      <div class="col-md-4">
+                        <label>Apellido paterno: </label>
+                        <input type="text" class="form-control texto" id="apePaterno" placeholder="Santos" [(ngModel)]="usuario.ape_paterno" [ngModelOptions]="{standalone: true}">
+                      </div>
+                      <div class="col-md-4">
+                        <label>Apellido materno: </label>
+                        <input type="text" class="form-control texto" id="apeMaterno" placeholder="Silva" [(ngModel)]="usuario.ape_materno" [ngModelOptions]="{standalone: true}">
+                      </div>
+                  </div>
+                  <div class="row">
                       <div class="col-md-6">
-                        <label>País: </label>
-                        <select class="form-control select-arrow" name="pais" (change)="onSelectPais($event)" [(ngModel)]="empresa.pais" [ngModelOptions]="{standalone: true}">
-                          <option value=""></option>
-                          <option *ngFor="let pais of paises" [value]="pais.geonameId">{{ pais.countryName }}</option>
+                        <label>Género: </label>
+                        <select class="form-control select-arrow" name="genero" id="genero" [(ngModel)]="usuario.genero" [ngModelOptions]="{standalone: true}">
+                          <option value="Masculino">Masculino</option>
+                          <option value="Femenino">Femenino</option>
+                          <option value="Otro">Otro</option>
                         </select>
                       </div>
                       <div class="col-md-6">
-                        <label>Código postal: </label>
-                        <input type="number" class="form-control texto" id="cp-empresa" placeholder="37800" [(ngModel)]="empresa.cp" [ngModelOptions]="{standalone: true}">
+                        <label>Fecha de nacimiento: </label>
+                        <input type="date" class="form-control texto" id="fecha_nacimiento" [(ngModel)]="usuario.fecha_nacimiento" [ngModelOptions]="{standalone: true}">
                       </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Estado/Provincia/Región: </label>
-                            <select class="form-control select-arrow" name="estado" *ngIf="estados" (change)="onSelectEstado($event)" [(ngModel)]="empresa.estado" [ngModelOptions]="{standalone: true}">
-                              <option value=""></option>
-                              <option *ngFor="let estado of estados" [value]="estado.geonameId">{{ estado.name }}</option>
-                            </select>
-                          </div>
-                        <div class="col-md-4">
-                          <label>Ciudad: </label>
-                          <select class="form-control select-arrow" name="ciudad" *ngIf="ciudades"[(ngModel)]="empresa.ciudad" [ngModelOptions]="{standalone: true}">
-                            <option value=""></option>
-                            <option *ngFor="let ciudad of ciudades" [value]="ciudad.name">{{ ciudad.name }}</option>
-                          </select>
-                        </div>
-                        <div class="col-md-4">
-                          <label>Colonia: </label>
-                          <input type="text" class="form-control texto" id="colonia" placeholder="Lindavista" [(ngModel)]="empresa.colonia" [ngModelOptions]="{standalone: true}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                          <label>Calle: </label>
-                          <input type="text" class="form-control texto" id="calle" placeholder="Saturno" [(ngModel)]="empresa.calle" [ngModelOptions]="{standalone: true}">
-                        </div>
-                        <div class="col-md-6">
-                          <label>Número: </label>
-                          <input type="number" class="form-control texto" id="numero" placeholder="5" [(ngModel)]="empresa.numero" [ngModelOptions]="{standalone: true}">
-                        </div>
-                    </div>
-                    <div class="row centered-buttons">
-                      <div class="col-md-12 text-center">
-                        <button mat-button matStepperPrevious type="submit" class="btn anterior btn-large">Anterior</button>
-                        <button mat-button type="submit" class="btn siguiente btn-large" (click)="validarDireccion(stepper)">Siguiente</button>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-4">
+                        <label>Correo electrónico: </label>
+                        <input type="email" class="form-control texto" id="email-dueno" placeholder="neysantos@gmail.com" [(ngModel)]="usuario.email" [ngModelOptions]="{standalone: true}">
                       </div>
-                    </div>
-                  </form>
-            </mat-step>
-            
-            <!-- Paso 4: Elegir suscripción -->
-            <mat-step label="Elegir suscripción" [optional]="false">
-              <div class="text-center">
-                <h2 style="color: #020061;">Tipo de suscripción</h2>
-              </div>
-              <form style="background-color: #cfcee0; margin-bottom: -50px; margin-left: -30px; margin-right: -30px;">
-                <div class="row">
-                    <div class="card-container">
-                      <!-- Tarjeta del Plan Básico -->
-                      <div class="pricing-card">
-                        <div class="pricing-header basic">
-                          <h3 class="plan-title">BÁSICO</h3>
-                          <span class="price-tag" style="font-size: 22px;">$0 MXN</span>
-                        </div>
-                        <ul class="plan-features">
-                          <li>✘ Sin Límite de Equipos (Límitado a 2)</li>
-                          <li>
-                            ✘ Kit de Usuarios Completo (Permitido un Máximo de 2 Administradores,
-                            2 Supervisores y 8 Empleados.)
-                          </li>
-                          <li>✘ Sin Límite de Proyectos (Limitado a 2 Proyectos por Equipo.)</li>
-                          <li>✘ Sin Límite de Tareas (Límitado Hasta 4 tareas por proyecto.)</li>
-                          <li>✘ Incluye Notas</li>
-                          <li>✘ Incluye Comentarios</li>
-                          <li>✘ Incluye Gráficas de Productividad en Proyectos</li>
-                          <li>✘ Incluye Gráficas de Productividad en Empleados</li>
-                        </ul>
-                        <button mat-button class="buy-now" (click)="valoresPago('0','Básico',1,stepper)">COMPRAR AHORA</button>
+                      <div class="col-md-4">
+                        <label>Teléfono: </label>
+                        <input type="tel" class="form-control texto" id="tel-dueno" placeholder="4181121718" [(ngModel)]="usuario.telefono" [ngModelOptions]="{standalone: true}">
                       </div>
-                  
-                      <!-- Tarjeta del Plan Estándar -->
-                      <div class="pricing-card">
-                        <div class="pricing-header standard">
-                          <h3 class="plan-title">PRO</h3>
-                          <span class="price-tag" style="font-size: 22px;">$100 MXN</span>
-                        </div>
-                        <ul class="plan-features">
-                          <li>✔ Sin Límite de Equipos</li>
-                          <li>
-                            ✔ Kit de Usuarios Completo (Permitido un Máximo de 2 Administradores,
-                            sin Límite de Supervisores y Empleados.)
-                          </li>
-                          <li>✔ Sin Límite de Proyectos</li>
-                          <li>✔ Sin Límite de Tareas</li>
-                          <li>✔ Incluye Notas (Posibilidad de Añadir Notas a Proyectos.)</li>
-                          <li>✔ Incluye Comentarios (Posibilidad de Comentar en Actividades.)</li>
-                          <li>✘ Incluye Gráficas de Productividad en Proyectos</li>
-                          <li>✘ Incluye Gráficas de Productividad en Empleados</li>
-                        </ul>
-                        <button mat-button class="buy-now" (click)="valoresPago('100','Pro',2,stepper)">COMPRAR AHORA</button>
+                      <div class="col-md-4">
+                        <label>Contraseña: </label>
+                        <input type="password" class="form-control texto" id="password" placeholder="********" [(ngModel)]="usuario.password" [ngModelOptions]="{standalone: true}">
                       </div>
-                  
-                      <!-- Tarjeta del Plan Premium -->
-                      <div class="pricing-card">
-                        <div class="pricing-header premium">
-                          <h3 class="plan-title">PREMIUM</h3>
-                          <span class="price-tag" style="font-size: 22px;">$150 MXN</span>
-                        </div>
-                        <ul class="plan-features">
-                          <!-- Características del Plan Básico -->
-                          <li>✔ Sin Límite de Equipos</li>
-                          <li>
-                            ✔ Kit de Usuarios Completo (Permitido un Máximo de 2 Administradores,
-                            sin Límite de Supervisores y Empleados.)
-                          </li>
-                          <li>✔ Sin Límite de Proyectos</li>
-                          <li>✔ Sin Límite de Tareas</li>
-                          <li>
-                            ✔ Incluye Notas (Posibilidad de Añadir Notas a Proyectos y de Enviar
-                            Notificaciones a los Miembros del Equipo)
-                          </li>
-                          <li>✔ Incluye Comentarios (Posibilidad de Comentar en Actividades.)</li>
-                          <li>✔ Incluye Gráficas de Productividad en Proyectos</li>
-                          <li>✔ Incluye Gráficas de Productividad en Empleados</li>
-                        </ul>
-                        <button mat-button class="buy-now" (click)="valoresPago('150','Premium',3,stepper)">COMPRAR AHORA</button>
-                      </div>
-                    </div>
                   </div>
                   <div class="row centered-buttons">
                     <div class="col-md-12 text-center">
-                      <button mat-button matStepperPrevious type="submit" class="btn btn-large anterior ultimo-btn">Anterior</button>
-                    </div>
-                  </div>
-              </form>
-            </mat-step>
-
-            <!-- Paso 5: Pago de la suscripción -->
-            <mat-step label="Pago de suscripción" [optional]=false>
-              <form class="centered-form">
-                  <div class="form-title text-center">
-                    <h2 style="color: #020061; margin-bottom: 20px;">Pago de suscripción</h2>
-                  </div>
-                  <div class="row text-center">
-                    <div class="col-md-12">
-                      <h4>Tipo de suscripción: <span style="color: #020061;">{{tipoPlan}}</span></h4>
-                    </div>
-                    <div class="col-md-12">
-                      <h4>Precio de suscripción: <span style="color: #020061;">${{precioPlan}} MXN</span></h4>
-                    </div>
-                  </div>
-                  <div class="row paypal-button-container" *ngIf="precioPlan > 0">
-                    <div id="paypal-button-container"></div>
-                  </div>
-                  <div class="row centered-buttons">
-                    <div class="col-md-12 text-center" *ngIf="precioPlan > 0">
-                      <button mat-button matStepperPrevious style="margin-right: 0px;" type="submit" class="btn anterior btn-large">Anterior</button>
-                    </div>
-                    <div class="col-md-12 text-center" *ngIf="precioPlan == 0">
-                      <button mat-button matStepperPrevious type="submit" class="btn anterior btn-large">Anterior</button>
-                      <button mat-button type="submit" (click)=registroDatos() class="btn siguiente btn-large">Finalizar</button>
+                      <button mat-button  type="submit" class="btn siguiente btn-large" (click)="validarDatosEmpresa(stepper)">Siguiente</button>
                     </div>
                   </div>
                 </form>
-            </mat-step>
-          </mat-horizontal-stepper>
-    </div>
+          </mat-step>
+          
+          <!-- Paso 3: Datos de dirección -->
+          <mat-step label="Datos de dirección" [completed]="empresaDatos">
+              <form class="centered-form">
+                  <div class="form-title text-center">
+                    <h2 style="color: #020061;">Dirección de la empresa</h2>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label>País: </label>
+                      <select class="form-control select-arrow" name="pais" (change)="onSelectPais($event)" [(ngModel)]="empresa.pais" [ngModelOptions]="{standalone: true}">
+                        <option value=""></option>
+                        <option *ngFor="let pais of paises" [value]="pais.geonameId">{{ pais.countryName }}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label>Código postal: </label>
+                      <input type="number" class="form-control texto" id="cp-empresa" placeholder="37800" [(ngModel)]="empresa.cp" [ngModelOptions]="{standalone: true}">
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-4">
+                          <label>Estado/Provincia/Región: </label>
+                          <select class="form-control select-arrow" name="estado" *ngIf="estados" (change)="onSelectEstado($event)" [(ngModel)]="empresa.estado" [ngModelOptions]="{standalone: true}">
+                            <option value=""></option>
+                            <option *ngFor="let estado of estados" [value]="estado.geonameId">{{ estado.name }}</option>
+                          </select>
+                        </div>
+                      <div class="col-md-4">
+                        <label>Ciudad: </label>
+                        <select class="form-control select-arrow" name="ciudad" *ngIf="ciudades"[(ngModel)]="empresa.ciudad" [ngModelOptions]="{standalone: true}">
+                          <option value=""></option>
+                          <option *ngFor="let ciudad of ciudades" [value]="ciudad.name">{{ ciudad.name }}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4">
+                        <label>Colonia: </label>
+                        <input type="text" class="form-control texto" id="colonia" placeholder="Lindavista" [(ngModel)]="empresa.colonia" [ngModelOptions]="{standalone: true}">
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                        <label>Calle: </label>
+                        <input type="text" class="form-control texto" id="calle" placeholder="Saturno" [(ngModel)]="empresa.calle" [ngModelOptions]="{standalone: true}">
+                      </div>
+                      <div class="col-md-6">
+                        <label>Número: </label>
+                        <input type="number" class="form-control texto" id="numero" placeholder="5" [(ngModel)]="empresa.numero" [ngModelOptions]="{standalone: true}">
+                      </div>
+                  </div>
+                  <div class="row centered-buttons">
+                    <div class="col-md-12 text-center">
+                      <button mat-button matStepperPrevious type="submit" class="btn anterior btn-large">Anterior</button>
+                      <button mat-button type="submit" class="btn siguiente btn-large" (click)="validarDireccion(stepper)">Siguiente</button>
+                    </div>
+                  </div>
+                </form>
+          </mat-step>
+          
+          <!-- Paso 4: Elegir suscripción -->
+          <mat-step label="Elegir suscripción" [optional]="false">
+            <div class="text-center">
+              <h2 style="color: #020061;">Tipo de suscripción</h2>
+            </div>
+            <form style="background-color: #cfcee0; margin-bottom: -50px; margin-left: -30px; margin-right: -30px;">
+              <div class="row">
+                  <div class="card-container">
+                    <!-- Tarjeta del Plan Básico -->
+                    <div class="pricing-card">
+                      <div class="pricing-header basic">
+                        <h3 class="plan-title">BÁSICO</h3>
+                        <span class="price-tag" style="font-size: 22px;">$0 MXN</span>
+                      </div>
+                      <ul class="plan-features">
+                        <li>✘ Sin límite de equipos (limitado a dos)</li>
+                        <li>
+                          ✔ Kit de usuarios completo (sin límite de administradores, supervisores y empleados)
+                        </li>
+                        <li>✘ Sin límite de proyectos (limitado a dos proyectos por equipo)</li>
+                        <li>✘ Sin límite de tareas (limitado a cuatro tareas por proyecto)</li>
+                        <li>✘ Incluye notas</li>
+                        <li>✘ Incluye comentarios</li>
+                        <li>✘ Incluye gráficas de productividad en proyectos</li>
+                        <li>✘ Incluye gráficas de productividad en empleados</li>
+                      </ul>
+                      <button mat-button class="buy-now" (click)="valoresPago('0','Básico',1,stepper)">COMPRAR AHORA</button>
+                    </div>
+                
+                    <!-- Tarjeta del Plan Estándar -->
+                    <div class="pricing-card">
+                      <div class="pricing-header standard">
+                        <h3 class="plan-title">PRO</h3>
+                        <span class="price-tag" style="font-size: 22px;">$100 MXN</span>
+                      </div>
+                      <ul class="plan-features">
+                        <li>✔ Sin límite de equipos</li>
+                        <li>
+                          ✔ Kit de usuarios completo (sin límite de administradores, supervisores y empleados)
+                        </li>
+                        <li>✔ Sin límite de proyectos</li>
+                        <li>✔ Sin límite de tareas</li>
+                        <li>✔ Incluye notas (posibilidad de añadir notas a proyectos)</li>
+                        <li>✔ Incluye comentarios (posibilidad de comentar en actividades)</li>
+                        <li>✘ Incluye gráficas de productividad en proyectos</li>
+                        <li>✘ Incluye gráficas de productividad en empleados</li>
+                      </ul>
+                      <button mat-button class="buy-now" (click)="valoresPago('100','Pro',2,stepper)">COMPRAR AHORA</button>
+                    </div>
+                
+                    <!-- Tarjeta del Plan Premium -->
+                    <div class="pricing-card">
+                      <div class="pricing-header premium">
+                        <h3 class="plan-title">PREMIUM</h3>
+                        <span class="price-tag" style="font-size: 22px;">$150 MXN</span>
+                      </div>
+                      <ul class="plan-features">
+                        <!-- Características del Plan Básico -->
+                        <li>✔ Sin límite de equipos</li>
+                        <li>
+                          ✔ Kit de usuarios completo (sin límite de administradores, supervisores y empleados)
+                        </li>
+                        <li>✔ Sin límite de proyectos</li>
+                        <li>✔ Sin límite de tareas</li>
+                        <li>
+                          ✔ Incluye notas (posibilidad de añadir notas a proyectos y de enviar
+                          notificaciones a los miembros del equipo)
+                        </li>
+                        <li>✔ Incluye comentarios (posibilidad de comentar en actividades)</li>
+                        <li>✔ Incluye gráficas de productividad en proyectos</li>
+                        <li>✔ Incluye gráficas de productividad en empleados</li>
+                      </ul>
+                      <button mat-button class="buy-now" (click)="valoresPago('150','Premium',3,stepper)">COMPRAR AHORA</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row centered-buttons">
+                  <div class="col-md-12 text-center">
+                    <button mat-button matStepperPrevious type="submit" class="btn btn-large anterior ultimo-btn">Anterior</button>
+                  </div>
+                </div>
+            </form>
+          </mat-step>
+
+          <!-- Paso 5: Pago de la suscripción -->
+          <mat-step label="Pago de suscripción" [optional]=false>
+            <form class="centered-form">
+                <div class="form-title text-center">
+                  <h2 style="color: #020061; margin-bottom: 20px;">Pago de suscripción</h2>
+                </div>
+                <div class="row text-center">
+                  <div class="col-md-12">
+                    <h4>Tipo de suscripción: <span style="color: #020061;">{{tipoPlan}}</span></h4>
+                  </div>
+                  <div class="col-md-12">
+                    <h4>Precio de suscripción: <span style="color: #020061;">${{precioPlan}} MXN</span></h4>
+                  </div>
+                </div>
+                <div class="row paypal-button-container" *ngIf="precioPlan > 0">
+                  <div id="paypal-button-container"></div>
+                </div>
+                <div class="row centered-buttons">
+                  <div class="col-md-12 text-center" *ngIf="precioPlan > 0">
+                    <button mat-button matStepperPrevious style="margin-right: 0px;" type="submit" class="btn anterior btn-large">Anterior</button>
+                  </div>
+                  <div class="col-md-12 text-center" *ngIf="precioPlan == 0">
+                    <button mat-button matStepperPrevious type="submit" class="btn anterior btn-large">Anterior</button>
+                    <button mat-button type="submit" (click)=registroDatos() class="btn siguiente btn-large">Finalizar</button>
+                  </div>
+                </div>
+              </form>
+          </mat-step>
+        </mat-horizontal-stepper>
+  </div>
 
 <app-footer></app-footer>

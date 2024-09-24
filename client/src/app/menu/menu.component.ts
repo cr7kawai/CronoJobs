@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -7,23 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit{
 
-  datoSesion: any = sessionStorage.getItem('userData');
-  datoSesionObject: any;
+  datosUsuario: any;
   usuario: any = null;
   rol: any = null;
+  plan: any = null;
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    if (this.datoSesion) {
-      this.datoSesionObject = JSON.parse(this.datoSesion);
-      if (this.datoSesionObject) {
-        this.usuario = this.datoSesionObject.nombre;
-        this.rol = this.datoSesionObject.fk_rol;
-      }
+    this.datosUsuario = this.authService.getUserData();
+    if (this.datosUsuario) {
+      this.usuario = this.datosUsuario.nombre;
+      this.rol = this.datosUsuario.fk_rol;
+      this.plan = this.datosUsuario.fk_suscripcion;
     }
   }
 
   cerrarSesion(){
-    sessionStorage.removeItem('userData');
+    localStorage.removeItem('token');
     window.location.href = '/';
   }
 }

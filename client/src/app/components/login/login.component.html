@@ -1,40 +1,95 @@
 <div class="background">
     <app-menu></app-menu>
-
+  
     <div class="breadcrumb-container">
-        <h1 class="page-title">Inicio de Sesión</h1>
-      
-        <div class="breadcrumb">
-          <a href="/" class="breadcrumb-link">Inicio</a>
-          /<span class="breadcrumb-current">Inicio de Sesión</span>
-        </div>
+      <h1 class="page-title">Inicio de Sesión</h1>
+  
+      <div class="breadcrumb">
+        <a href="/" class="breadcrumb-link">Inicio</a>
+        /<span class="breadcrumb-current">Inicio de Sesión</span>
+      </div>
     </div>
-
+  
     <main>
-    <div class="contenedor__todo">
+      <div class="contenedor__todo">
         <div class="caja__trasera">
-            <div class=" col-4">
-            </div>
-            <div class="caja__trasera-register">
-                <br>
-                <h3>¿Aún no tienes una cuenta?</h3>
-                <p>Por favor solicita una en tu empresa o registra tu propia empresa <a href="/registro">aquí</a>.</p>
-            </div>
+          <div class="col-4"></div>
+          <div class="caja__trasera-register">
+            <br />
+            <h3>¿Aún no tienes una cuenta?</h3>
+            <p>
+              Por favor solicita una en tu empresa o registra tu propia empresa
+              <a href="/registro">aquí</a>.
+            </p>
+          </div>
         </div>
-
+  
         <!--Formulario de Login y registro-->
         <div class="contenedor__login-register">
-            <!--Login-->
-            <form action="" class="formulario__login">
-                <h1>Iniciar Sesión</h1>
-                <input type="text" placeholder="Correo Electronico" [(ngModel)]="usuario.email" name="email">
-                <input type="password" placeholder="Contraseña" [(ngModel)]="usuario.password" name="password">
-                <button (click)=login()>Entrar</button>
-            </form>
+          <!--Login-->
+          <form action="" class="formulario__login">
+            <h1>Iniciar Sesión</h1>
+            <input
+              type="text"
+              placeholder="Correo Electronico"
+              [(ngModel)]="usuario.email"
+              name="email"
+            />
+            <input
+              type="password"
+              placeholder="Contraseña"
+              [(ngModel)]="usuario.password"
+              name="password"
+            />
+            <p>¿Olvidaste tu contraseña? <a href="/cambiar-contrasena">recupérala aquí.</a></p>
+            <button (click)="login()">Entrar</button>
+          </form>
         </div>
-    </div>
-</main>
-    <br>
-    <br>
+      </div>
+  
+      <!-- Modal for OTP, controlled by Angular -->
+      <div
+        class="modal"
+        tabindex="-1"
+        role="dialog"
+        *ngIf="showOtpModal"
+        style="display: block; background-color: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Ingrese su código de autenticación</h5>
+              <button
+                type="button"
+                class="btn-close"
+                (click)="closeModal()"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="OTP"
+                [(ngModel)]="otp"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="closeModal()"
+              >
+                Cerrar
+              </button>
+              <button type="button" class="btn btn-primary" (click)="verifyOtp()">
+                Validar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <br />
+    <br />
     <app-footer></app-footer>
-</div>
+  </div>

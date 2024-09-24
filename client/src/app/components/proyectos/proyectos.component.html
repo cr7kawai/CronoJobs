@@ -448,7 +448,7 @@
                     mat-raised-button
                     type="submit"
                     class="btn btn-primary btn-large mr-2"
-                    [disabled]="notaForm.invalid"
+                    [disabled]="notaForm.invalid || botonNotaCreada == false"
                   >
                     Agregar
                   </button>
@@ -601,6 +601,7 @@
           </button>
           <button
             type="submit"
+            [disabled]="btnCrearProyecto == false"
             class="btn btn-primary btn-large guardar"
             (click)="crearProyecto()"
           >

@@ -2,9 +2,9 @@ export interface Proyecto{
     pk_proyecto?: number,
     nombre?: string,
     descripcion?: string,
-    fecha_inicio?: Date,
-    fecha_fin?: Date,
+    fecha_inicio?: any,
+    fecha_fin?: any,
     estado?: Boolean,
-    fecha_termino?: Date
+    fecha_termino?: any
     fk_area?: number
 }

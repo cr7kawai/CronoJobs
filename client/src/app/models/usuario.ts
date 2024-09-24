@@ -9,6 +9,6 @@ export interface Usuario{
     genero?: string,
     fecha_nacimiento?: Date,
     fk_rol?: number,
-    fk_area?: number,
+    fk_area?: any,
     fk_empresa?: number,
 }

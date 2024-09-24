@@ -260,6 +260,7 @@
           </button>
           <button
             type="submit"
+            [disabled]="btnCrearActividad == false"
             class="btn btn-primary btn-large guardar"
             (click)="crearActividad()"
           >
@@ -472,7 +473,7 @@
                     mat-raised-button
                     type="submit"
                     class="btn btn-primary btn-large mr-2"
-                    [disabled]="notaForm.invalid"
+                    [disabled]="notaForm.invalid || btnCrearComentario == false"
                   >
                     Agregar
                   </button>

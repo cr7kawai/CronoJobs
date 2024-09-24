@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Nota } from 'src/app/models/nota';
+import { AuthService } from 'src/app/services/auth.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 
@@ -19,19 +20,24 @@ export class VistaProyectoComponent implements OnInit{
   notaCreada: Nota ={};
 
   // Datos de la sesión
-  datoSesion: any = [];
-  datoSesionObject: any = [];
+  datosUsuario: any;
   rol: any = null;
 
-  constructor(private activatedRoute: ActivatedRoute, private notaService: NotaService, private proyectoService: ProyectoService, private toastr: ToastrService, private router: Router){}
+
+  constructor(
+    private activatedRoute: ActivatedRoute, 
+    private notaService: NotaService, 
+    private proyectoService: ProyectoService, 
+    private toastr: ToastrService, 
+    private router: Router, 
+    private authService: AuthService
+  ){}
 
   ngOnInit(): void {
     // Validar si el usuario ha iniciado sesión
-    this.datoSesion = sessionStorage.getItem('userData');
-    this.datoSesionObject = JSON.parse(this.datoSesion);
-
-    if (this.datoSesionObject) {
-      this.rol = this.datoSesionObject.fk_rol || null;
+    this.datosUsuario = this.authService.getUserData();
+    if (this.datosUsuario) {
+      this.rol = this.datosUsuario.fk_rol;
     }else{
       this.router.navigate(['/403']);
       return;

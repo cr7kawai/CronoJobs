@@ -9,6 +9,7 @@ import { Notificacion } from 'src/app/models/notificacion';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { ToastrService } from 'ngx-toastr';
 import { Proyecto } from 'src/app/models/proyecto';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-estadistica-proyecto',
@@ -40,18 +41,21 @@ export class EstadisticaProyectoComponent implements OnInit {
   porcentajeProyecto: any;
   proyectoId: any;
 
-  datoSesion: any = [];
-  datoSesionObject: any = [];
-  rol: any = null;
   nombreProyecto: string = '';
+  notificacionBoton = true;
 
+  // Datos de la sesión
+  datoSesion: any;
+  rol: any = null;
+  
   constructor(
     private actividadesService: ActividadService,
     private usuarioService: UsuarioService,
     private toastr: ToastrService,
     private proyectoService: ProyectoService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   @ViewChild(MatPaginator) paginatorCompleta!: MatPaginator;
@@ -60,11 +64,10 @@ export class EstadisticaProyectoComponent implements OnInit {
 
   ngOnInit() {
     // Obtener datos del inicio de sesión
-    this.datoSesion = sessionStorage.getItem('userData');
-    this.datoSesionObject = JSON.parse(this.datoSesion);
+    this.datoSesion = this.authService.getUserData();
 
-    if (this.datoSesionObject) {
-      this.rol = this.datoSesionObject.fk_rol || null;
+    if (this.datoSesion) {
+      this.rol = this.datoSesion.fk_rol || null;
     }
 
     // No permitir el acceso a los empleados y a los que no han iniciado sesión
@@ -211,6 +214,7 @@ export class EstadisticaProyectoComponent implements OnInit {
 
   abrirNotificacionModal() {
     this.notificacionModalAbierto = true;
+    this.notificacionBoton = true;
   }
 
   cerrarNotificacionModal() {
@@ -219,6 +223,18 @@ export class EstadisticaProyectoComponent implements OnInit {
   }
 
   crearNotificacion() {
+    if (!this.notificacionCreada.comentario) {
+      this.toastr.error('El comentario es requerido', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.notificacionCreada.comentario.length < 3 || this.notificacionCreada.comentario.length > 450) {
+      this.toastr.error('El comentario debe tener entre 3 y 450 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    this.notificacionBoton = false
+
     this.notificacionCreada.fk_usuario = this.proyecto.pk_usuario;
     const fecha = new Date();
     this.notificacionCreada.fecha = fecha.toISOString().slice(0, 10);

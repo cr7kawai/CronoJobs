@@ -8,6 +8,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { Notificacion } from 'src/app/models/notificacion';
 import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/usuario';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-estadistica-empleado',
@@ -38,8 +39,10 @@ export class EstadisticaEmpleadoComponent implements OnInit {
   porcentajeEmpleado: any;
   usuarioId: any;
 
-  datoSesion: any = [];
-  datoSesionObject: any = [];
+  notificacionBoton = true;
+
+  // Datos de la sesión
+  datoSesion: any;
   rol: any = null;
 
   usuarioCompleto: Usuario | undefined; // Donde Usuario es la interface que tienes definida
@@ -49,7 +52,8 @@ export class EstadisticaEmpleadoComponent implements OnInit {
     private usuarioService: UsuarioService,
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   @ViewChild(MatPaginator) paginatorCompleta!: MatPaginator;
@@ -58,11 +62,10 @@ export class EstadisticaEmpleadoComponent implements OnInit {
 
   ngOnInit() {
     // Obtener datos del inicio de sesión
-    this.datoSesion = sessionStorage.getItem('userData');
-    this.datoSesionObject = JSON.parse(this.datoSesion);
+    this.datoSesion = this.authService.getUserData();
 
-    if (this.datoSesionObject) {
-      this.rol = this.datoSesionObject.fk_rol || null;
+    if (this.datoSesion) {
+      this.rol = this.datoSesion.fk_rol || null;
     }
 
     // No permitir el acceso a los empleados y a los que no han iniciado sesión
@@ -209,6 +212,7 @@ export class EstadisticaEmpleadoComponent implements OnInit {
 
   abrirNotificacionModal() {
     this.notificacionModalAbierto = true;
+    this.notificacionBoton = true;
   }
 
   cerrarNotificacionModal() {
@@ -217,6 +221,19 @@ export class EstadisticaEmpleadoComponent implements OnInit {
   }
 
   crearNotificacion() {
+
+    if (!this.notificacionCreada.comentario) {
+      this.toastr.error('El comentario es requerido', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.notificacionCreada.comentario.length < 3 || this.notificacionCreada.comentario.length > 450) {
+      this.toastr.error('El comentario debe tener entre 3 y 450 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    this.notificacionBoton = false
+
     this.notificacionCreada.fk_usuario = this.usuario.pk_usuario;
     const fecha = new Date();
     this.notificacionCreada.fecha = fecha.toISOString().slice(0, 10);

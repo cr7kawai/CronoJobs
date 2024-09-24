@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { RegistroResponse } from 'src/app/models/IRegistroResponse.interface';
 import { Empresa } from 'src/app/models/empresa';
 import { Usuario } from 'src/app/models/usuario';
+import { AuthService } from 'src/app/services/auth.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { LoginService } from 'src/app/services/login.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -39,9 +41,27 @@ export class RegistroEmpresaComponent implements OnInit {
 
   resultado: any = [];
 
-  constructor(private http: HttpClient, private usuarioService: UsuarioService, private empresaService: EmpresaService, private loginService: LoginService, private toastr: ToastrService) { }
+  // Datos de la sesión
+  datoSesion: any;
+
+  constructor(
+    private http: HttpClient, 
+    private usuarioService: UsuarioService, 
+    private empresaService: EmpresaService, 
+    private loginService: LoginService, 
+    private toastr: ToastrService,
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
+    this.datoSesion = this.authService.getUserData();
+    if(this.datoSesion){
+      this.router.navigate(['/']);
+      return;
+    }
+
+
     //Geonames
     this.http.get('http://api.geonames.org/countryInfoJSON?username=CronoJobs')
       .subscribe((data: any) => {
@@ -182,8 +202,8 @@ export class RegistroEmpresaComponent implements OnInit {
     }
 
     // Validación de la contraseña (aquí debes implementar tu lógica para definir qué es una contraseña segura)
-    if (!this.usuario || !this.usuario.password || this.usuario.password.length < 8) {
-        this.toastr.error('La contraseña debe tener al menos 8 caracteres', 'Error', {timeOut: 3000});
+    if (!this.usuario || !this.usuario.password || this.usuario.password.length < 8 || this.usuario.password.length > 16) {
+        this.toastr.error('La contraseña debe tener entre 8 y 16 caractéres', 'Error', {timeOut: 3000});
         return;
     }
 
@@ -296,14 +316,14 @@ export class RegistroEmpresaComponent implements OnInit {
   }
 
   login() {
-    this.loginService.login(this.usuario).subscribe(
-      (res) => {
-        this.resultado = res;
-        sessionStorage.setItem(
-          'userData',
-          JSON.stringify(this.resultado.userData)
-        );
-          window.location.href = '/usuarios';
+    this.loginService.inicio_sesion(this.usuario).subscribe(
+      (res: any) => {
+        console.log(res)
+        const token = res.token;
+
+        localStorage.setItem('token', token);
+        
+        window.location.href = '/equipo-area';
       },
       (err) => {
         this.toastr.warning(

@@ -10,7 +10,7 @@ import { EstadisticaProyectoComponent } from './components/estadistica-proyecto/
 import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import {
@@ -34,7 +34,6 @@ import { HomeComponent } from './components/home/home.component';
 import { Error403Component } from './error/error403/error403.component';
 import { Error404Component } from './error/error404/error404.component';
 import { CustomPaginatorIntl } from './services/customPaginatorIntl.service';
-import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { FooterComponent } from './footer/footer.component';
 import { MatCardModule } from '@angular/material/card';
 import { EquiposAreasComponent } from './components/equipos-areas/equipos-areas.component';
@@ -46,6 +45,9 @@ import { BuscadorComponent } from './components/buscador/buscador.component';
 import { NgxCaptchaModule } from 'ngx-captcha';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-password.component';
+import { TokenInterceptor } from './services/HttpInterceptor.service';
+import { ActuaizarSubscripcionComponent } from './components/actuaizar-subscripcion/actuaizar-subscripcion.component';
 
 @NgModule({
   declarations: [
@@ -63,13 +65,14 @@ import { MatMenuModule } from '@angular/material/menu';
     HomeComponent,
     Error404Component,
     Error403Component,
-    BreadcrumbComponent,
     FooterComponent,
     EquiposAreasComponent,
     RegistroEmpresaComponent,
     MapaComponent,
     PoliticaPrivacidadComponent,
-    BuscadorComponent
+    BuscadorComponent,
+    CambiarPasswordComponent,
+    ActuaizarSubscripcionComponent
   ],
   imports: [
     BrowserModule,
@@ -100,6 +103,11 @@ import { MatMenuModule } from '@angular/material/menu';
       provide: MatPaginatorIntl,
       useClass: CustomPaginatorIntl,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
 })

@@ -1,0 +1,102 @@
+<app-menu></app-menu>
+
+  <div class="breadcrumb-container">
+    <h1 class="page-title">Actualización de Suscripción</h1>
+
+    <div class="breadcrumb">
+      <a href="/" class="breadcrumb-link">Inicio</a>
+      /<span class="breadcrumb-current">Actualización de Suscripción</span>
+    </div>
+  </div>
+
+  <div class="card">
+      <mat-horizontal-stepper [linear]="true" #stepper>
+          <!-- Paso 1: Elegir suscripción -->
+          <mat-step label="Elección de Suscripción" [optional]="false">
+            <div class="text-center">
+              <h2 style="color: #020061;">Tipo de suscripción</h2>
+            </div>
+            <form style="background-color: #cfcee0; margin-bottom: -50px; margin-left: -30px; margin-right: -30px;">
+              <div class="row">
+                  <div class="card-container">
+                    <!-- Tarjeta del Plan Estándar -->
+                    <div class="pricing-card">
+                      <div class="pricing-header standard">
+                        <h3 class="plan-title">PRO</h3>
+                        <span class="price-tag" style="font-size: 22px;">$100 MXN</span>
+                      </div>
+                      <ul class="plan-features">
+                        <li>✔ Sin límite de equipos</li>
+                        <li>
+                          ✔ Kit de usuarios completo (sin límite de administradores, supervisores y empleados)
+                        </li>
+                        <li>✔ Sin límite de proyectos</li>
+                        <li>✔ Sin límite de tareas</li>
+                        <li>✔ Incluye notas (posibilidad de añadir notas a proyectos)</li>
+                        <li>✔ Incluye comentarios (posibilidad de comentar en actividades)</li>
+                        <li>✘ Incluye gráficas de productividad en proyectos</li>
+                        <li>✘ Incluye gráficas de productividad en empleados</li>
+                      </ul>
+                      <button mat-button class="buy-now" (click)="valoresPago('100','Pro',2,stepper)">COMPRAR AHORA</button>
+                    </div>
+                
+                    <!-- Tarjeta del Plan Premium -->
+                    <div class="pricing-card">
+                      <div class="pricing-header premium">
+                        <h3 class="plan-title">PREMIUM</h3>
+                        <span class="price-tag" style="font-size: 22px;">$150 MXN</span>
+                      </div>
+                      <ul class="plan-features">
+                        <!-- Características del Plan Básico -->
+                        <li>✔ Sin límite de equipos</li>
+                        <li>
+                          ✔ Kit de usuarios completo (sin límite de administradores, supervisores y empleados)
+                        </li>
+                        <li>✔ Sin límite de proyectos</li>
+                        <li>✔ Sin límite de tareas</li>
+                        <li>
+                          ✔ Incluye notas (posibilidad de añadir notas a proyectos y de enviar
+                          notificaciones a los miembros del equipo)
+                        </li>
+                        <li>✔ Incluye comentarios (posibilidad de comentar en actividades)</li>
+                        <li>✔ Incluye gráficas de productividad en proyectos</li>
+                        <li>✔ Incluye gráficas de productividad en empleados</li>
+                      </ul>
+                      <button mat-button class="buy-now" (click)="valoresPago('150','Premium',3,stepper)">COMPRAR AHORA</button>
+                    </div>
+                  </div>
+                </div>
+            </form>
+          </mat-step>
+
+          <!-- Paso 2: Pago de la suscripción -->
+          <mat-step label="Pago de suscripción" [optional]=false>
+            <form class="centered-form">
+                <div class="form-title text-center">
+                  <h2 style="color: #020061; margin-bottom: 20px;">Pago de suscripción</h2>
+                </div>
+                <div class="row text-center">
+                  <div class="col-md-12" *ngIf="tipoPlan">
+                    <h4>Tipo de suscripción: <span style="color: #020061;">{{tipoPlan}}</span></h4>
+                  </div>
+                  <div class="col-md-12" *ngIf="precioPlan">
+                    <h4>Precio de suscripción: <span style="color: #020061;">${{precioPlan}} MXN</span></h4>
+                  </div>
+                  <div class="col-md-12" *ngIf="precioPlan == null && tipoPlan == null">
+                    <h4>Por favor, seleccione un plan para seguir con el pago</h4>
+                  </div>
+                </div>
+                <div class="row paypal-button-container" *ngIf="precioPlan > 0">
+                  <div id="paypal-button-container"></div>
+                </div>
+                <div class="row centered-buttons">
+                  <div class="col-md-12 text-center" *ngIf="precioPlan > 0">
+                    <button mat-button matStepperPrevious style="margin-right: 0px;" type="submit" class="btn anterior btn-large">Anterior</button>
+                  </div>
+                </div>
+              </form>
+          </mat-step>
+        </mat-horizontal-stepper>
+  </div>
+
+<app-footer></app-footer>

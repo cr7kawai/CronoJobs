@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { KeywordService } from 'src/app/services/keywords.service';
 
 @Component({
@@ -14,8 +15,7 @@ export class BuscadorComponent implements OnInit {
   showResults: boolean = true;
   
   // Datos de la sesión
-  datoSesion: any = sessionStorage.getItem('userData');
-  datoSesionObject: any;
+  datoSesion: any;
   usuario: any = null;
   rol: any = null;
 
@@ -23,16 +23,16 @@ export class BuscadorComponent implements OnInit {
     private keywordService: KeywordService,
     private router: Router,
     private elementRef: ElementRef,
+    private authService: AuthService
   ) {}
     
   ngOnInit() {
+    // Obtener datos del inicio de sesión
+    this.datoSesion = this.authService.getUserData();
 
     if (this.datoSesion) {
-      this.datoSesionObject = JSON.parse(this.datoSesion);
-      if (this.datoSesionObject) {
-        this.usuario = this.datoSesionObject.nombre;
-        this.rol = this.datoSesionObject.fk_rol;
-      }
+      this.usuario = this.datoSesion.nombre;
+      this.rol = this.datoSesion.fk_rol;
     }
 
     // Pa todos
@@ -52,6 +52,9 @@ export class BuscadorComponent implements OnInit {
 
       const registroKeywords = ['Registro','Nueva Empresa'];
       this.keywordService.addKeywords('/registro', registroKeywords);
+
+      const passwordKeywords = ['Cambiar Contraseña'];
+      this.keywordService.addKeywords('/cambiar-contrasena', passwordKeywords)
     }
 
     // Privilegios solo de admin, y CEO

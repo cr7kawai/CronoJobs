@@ -1,5 +1,6 @@
 import { Router } from "express";
 import empresaController from "../controller/empresa.controller";
+import { verifyToken } from "../middlewares/auth.middleware";
 
 
 class NotaRoutes{
@@ -11,11 +12,11 @@ class NotaRoutes{
     }
 
     config(): void {
-        this.router.get('/',empresaController.obtenerEmpresas);
-        this.router.get('/:id_empresa',empresaController.filtrarEmpresa)
+        this.router.get('/',verifyToken, empresaController.obtenerEmpresas);
+        this.router.get('/:id_empresa',verifyToken, empresaController.filtrarEmpresa)
         this.router.post('/',empresaController.registrarEmpresa);
-        this.router.put('/:id_empresa',empresaController.modificarEmpresa);
-        this.router.delete('/:id_empresa',empresaController.eliminarEmpresa);
+        this.router.put('/:id_empresa',verifyToken, empresaController.modificarEmpresa);
+        this.router.delete('/:id_empresa',verifyToken, empresaController.eliminarEmpresa);
     }
 }
 

@@ -94,21 +94,21 @@
             <button
               mat-icon-button
               class="btn btn-success"
-              *ngIf="rol == 1 || rol == 2"
+              *ngIf="rol == 2"
               matTooltip="Modificar"
-              [disabled]="row.rol === 'Administrador'"
               (click)="abrirModificacionModal(row.pk_usuario)"
             >
               <mat-icon>edit</mat-icon>
             </button>
             <button
               mat-icon-button
-              class="btn btn-warning"
-              *ngIf="rol == 1 || rol == 2"
-              matTooltip="Cambiar contraseña"
-              (click)="abrirPasswordModal(row.pk_usuario, row.email)"
+              class="btn btn-success"
+              *ngIf="rol == 1"
+              matTooltip="Modificar"
+              [disabled]="row.rol === 'Administrador' || row.rol === 'CEO'"
+              (click)="abrirModificacionModal(row.pk_usuario)"
             >
-              <mat-icon>vpn_key</mat-icon>
+              <mat-icon>edit</mat-icon>
             </button>
             <button
               mat-icon-button
@@ -127,9 +127,19 @@
             <button
               mat-icon-button
               class="btn btn-danger"
-              *ngIf="rol == 1 || rol == 2"
+              *ngIf="rol == 2"
               matTooltip="Eliminar"
-              [disabled]="row.rol === 'Administrador' || row.rol == 'CEO'"
+              [disabled]=" row.rol == 'CEO'"
+              (click)="eliminarUsuario(row.pk_usuario)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              class="btn btn-danger"
+              *ngIf="rol == 1"
+              matTooltip="Eliminar"
+              [disabled]="row.rol == 'Administrador' || row.rol == 'CEO'"
               (click)="eliminarUsuario(row.pk_usuario)"
             >
               <mat-icon>delete</mat-icon>
@@ -295,6 +305,7 @@
           </button>
           <button
             type="submit"
+            [disabled]="botonCrearHabilitado == false"
             class="btn btn-primary btn-large guardar"
             (click)="crearUsuario()"
           >
@@ -368,6 +379,7 @@
             type="email"
             class="form-control texto"
             id="email"
+            disabled="true"
             placeholder="juanrs@almotors.com"
             [(ngModel)]="datosUsuario.email"
             [ngModelOptions]="{ standalone: true }"
@@ -379,6 +391,7 @@
             type="tel"
             class="form-control texto"
             id="telefono"
+            disabled="true"
             placeholder="4181121719"
             [(ngModel)]="datosUsuario.telefono"
             [ngModelOptions]="{ standalone: true }"
@@ -463,50 +476,6 @@
   </mat-dialog-content>
 </div>
 <!-- cierre del modal de modificación -->
-
-<!-- modal de cambio de password -->
-<div class="overlay" *ngIf="passwordModalAbierto">
-  <mat-dialog-content class="modal-dialog-right password">
-    <form class="centered-form">
-      <div class="form-title">
-        <h2 style="color: #020061">Cambio de contraseña</h2>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <label>Nueva contraseña: </label>
-          <input
-            type="password"
-            class="form-control texto"
-            id="password"
-            placeholder="********"
-            [(ngModel)]="usuarioPassword.password"
-            [ngModelOptions]="{ standalone: true }"
-          />
-        </div>
-      </div>
-      <div class="row centered-buttons">
-        <div class="col-md-12 text-center">
-          <button
-            mat-raised-button
-            type="submit"
-            class="btn btn-danger btn-large"
-            (click)="cerrarPasswordModal()"
-          >
-            Cerrar
-          </button>
-          <button
-            type="submit"
-            class="btn btn-primary btn-large guardar"
-            (click)="cambiarPassword()"
-          >
-            Guardar
-          </button>
-        </div>
-      </div>
-    </form>
-  </mat-dialog-content>
-</div>
-<!-- cierre de modal de cambio de password -->
 
 <!-- Modal de vista de un usuario -->
 <div class="overlay" *ngIf="vistaModalAbierto">

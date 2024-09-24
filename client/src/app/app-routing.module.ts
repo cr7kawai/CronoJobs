@@ -16,6 +16,8 @@ import { RegistroEmpresaComponent } from './components/registro-empresa/registro
 import { PoliticaPrivacidadComponent } from './components/politica-privacidad/politica-privacidad.component';
 import { MapaComponent } from './components/mapa/mapa.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { CambiarPasswordComponent } from './components/cambiar-password/cambiar-password.component';
+import { ActuaizarSubscripcionComponent } from './components/actuaizar-subscripcion/actuaizar-subscripcion.component';
 
 const routes: Routes = [
   {
@@ -73,6 +75,14 @@ const routes: Routes = [
   {
     path: 'notificaciones',
     component: NotificacionesComponent
+  },
+  {
+    path: 'cambiar-contrasena',
+    component: CambiarPasswordComponent
+  },
+  {
+    path: 'actualizar-subscripcion',
+    component: ActuaizarSubscripcionComponent
   },
   {
     path: '403',

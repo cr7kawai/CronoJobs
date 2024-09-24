@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-footer',
@@ -7,16 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit{
 
-  datoSesion: any = sessionStorage.getItem('userData');
-  datoSesionObject: any;
+  constructor(private authService: AuthService) { }
+
+  datosUsuario: any;
   rol: any = null;
 
   ngOnInit(): void {
-    if (this.datoSesion) {
-      this.datoSesionObject = JSON.parse(this.datoSesion);
-      if (this.datoSesionObject) {
-        this.rol = this.datoSesionObject.fk_rol;
-      }
+    this.datosUsuario = this.authService.getUserData();
+    if (this.datosUsuario) {
+      this.rol = this.datosUsuario.fk_rol;
     }
   }
 }

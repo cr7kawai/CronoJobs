@@ -8,6 +8,7 @@ import { Actividad } from 'src/app/models/actividad';
 import { Comentario } from 'src/app/models/comentario';
 import { Proyecto } from 'src/app/models/proyecto';
 import { ActividadService } from 'src/app/services/actividad.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
@@ -36,8 +37,8 @@ export class ActividadesComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource(this.actividades);
 
-  datoSesion: any = [];
-  datoSesionObject: any = [];
+  // Datos de la sesión
+  datoSesion: any;
   rol: any = null;
   area: any = null;
   empresa: any = null;
@@ -50,6 +51,9 @@ export class ActividadesComponent implements OnInit {
   comentarios: any = [];
   nombreProyecto: string = '';
 
+  btnCrearActividad = true;
+  btnCrearComentario = true;
+
   constructor(
     private actividadService: ActividadService,
     private usuarioService: UsuarioService,
@@ -57,21 +61,21 @@ export class ActividadesComponent implements OnInit {
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private proyectoService: ProyectoService
+    private proyectoService: ProyectoService,
+    private authService: AuthService
   ) {}
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
     // Validar si el usuario ha iniciado sesión
-    this.datoSesion = sessionStorage.getItem('userData');
-    this.datoSesionObject = JSON.parse(this.datoSesion);
+    this.datoSesion = this.authService.getUserData();
 
-    if (this.datoSesionObject) {
-      this.rol = this.datoSesionObject.fk_rol || null;
-      this.area = this.datoSesionObject.fk_area || null;
-      this.empresa = this.datoSesionObject.fk_empresa || null;
-      this.plan = this.datoSesionObject.fk_suscripcion || null;
+    if (this.datoSesion) {
+      this.rol = this.datoSesion.fk_rol || null;
+      this.area = this.datoSesion.fk_area || null;
+      this.empresa = this.datoSesion.fk_empresa || null;
+      this.plan = this.datoSesion.fk_suscripcion || null;
     } else {
       this.router.navigate(['/403']);
       return;
@@ -83,7 +87,7 @@ export class ActividadesComponent implements OnInit {
     } else {
       this.obtenerActividadesEmpleado();
     }
-    if (this.datoSesionObject.fk_area) {
+    if (this.datoSesion.fk_area) {
       this.usuarioService
         .obtenerUsuariosArea(this.area, this.empresa)
         .subscribe(
@@ -123,7 +127,7 @@ export class ActividadesComponent implements OnInit {
     this.actividadService
       .obtenerActividadesEmpleado(
         this.pk_proyecto,
-        this.datoSesionObject.pk_usuario
+        this.datoSesion.pk_usuario
       )
       .subscribe(
         (res) => {
@@ -176,6 +180,7 @@ export class ActividadesComponent implements OnInit {
 
   abrirRegistroModal() {
     this.registroModalAbierto = true;
+    this.btnCrearActividad = true;
   }
 
   abrirModificacionModal(pk_actividad: any) {
@@ -201,6 +206,54 @@ export class ActividadesComponent implements OnInit {
   }
 
   crearActividad() {
+    if (!this.actividadCreada.nombre) {
+      this.toastr.error('El nombre de la actividad es requerido', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.actividadCreada.nombre.length < 3 || this.actividadCreada.nombre.length > 100) {
+      this.toastr.error('El nombre de la actividad debe tener entre 3 y 50 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de la descripción
+    if (!this.actividadCreada.descripcion) {
+      this.toastr.error('La descripción es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.actividadCreada.descripcion.length < 10 || this.actividadCreada.descripcion.length > 450) {
+      this.toastr.error('La descripción debe tener entre 10 y 450 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha de inicio
+    if (!this.actividadCreada.fecha_inicio) {
+      this.toastr.error('La fecha de inicio es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha fin
+    if (!this.actividadCreada.fecha_fin) {
+      this.toastr.error('La fecha de finalización es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de las fechas
+    const fechaInicio = new Date(this.actividadCreada.fecha_inicio);
+    const fechaFin = new Date(this.actividadCreada.fecha_fin);
+  
+    if (fechaInicio >= fechaFin) {
+      this.toastr.error('La fecha de finalización debe ser mayor a la fecha de inicio', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    if (!this.actividadCreada.fk_usuario) {
+      this.toastr.error('Se le debe de asignar un empleado a la actividad', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    this.btnCrearActividad = false;
     this.actividadCreada.estado = false;
     this.actividadCreada.fk_proyecto = this.pk_proyecto;
     this.actividadService.registrarActividad(this.actividadCreada).subscribe(
@@ -217,11 +270,59 @@ export class ActividadesComponent implements OnInit {
         this.toastr.error('No se pudo registrar la actividad', 'Error', {
           timeOut: 3000,
         });
+        this.btnCrearActividad = true;
       }
     );
   }
 
   modificarActividad() {
+    if (!this.modificacionActividad.nombre) {
+      this.toastr.error('El nombre de la actividad es requerido', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.modificacionActividad.nombre.length < 3 || this.modificacionActividad.nombre.length > 100) {
+      this.toastr.error('El nombre de la actividad debe tener entre 3 y 50 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de la descripción
+    if (!this.modificacionActividad.descripcion) {
+      this.toastr.error('La descripción es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.modificacionActividad.descripcion.length < 10 || this.modificacionActividad.descripcion.length > 450) {
+      this.toastr.error('La descripción debe tener entre 10 y 450 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha de inicio
+    if (!this.modificacionActividad.fecha_inicio) {
+      this.toastr.error('La fecha de inicio es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha fin
+    if (!this.modificacionActividad.fecha_fin) {
+      this.toastr.error('La fecha de finalización es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de las fechas
+    const fechaInicio = new Date(this.modificacionActividad.fecha_inicio);
+    const fechaFin = new Date(this.modificacionActividad.fecha_fin);
+  
+    if (fechaInicio >= fechaFin) {
+      this.toastr.error('La fecha de finalización debe ser mayor a la fecha de inicio', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    if (!this.modificacionActividad.fk_usuario) {
+      this.toastr.error('Se le debe de asignar un empleado a la actividad', 'Error', { timeOut: 3000 });
+      return;
+    }
+
     this.actividadService
       .modificarActividad(this.pk_actividad, this.modificacionActividad)
       .subscribe(
@@ -272,6 +373,7 @@ export class ActividadesComponent implements OnInit {
     this.pk_actividad = actividad.pk_actividad; // Guarda el ID de la actividad para futuras referencias
     this.comentarioModalAbierto = true; // Abre el modal
     this.obtenerComentarios(); // Obtiene los comentarios relacionados con la actividad
+    this.btnCrearComentario = true;
   }
 
   cerrarComentariosModal() {
@@ -293,6 +395,18 @@ export class ActividadesComponent implements OnInit {
   }
 
   agregarComentario() {
+
+    if (!this.comentarioCreado.descripcion) {
+      this.toastr.error('La descripción es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.comentarioCreado.descripcion.length < 10 || this.comentarioCreado.descripcion.length > 450) {
+      this.toastr.error('La descripción debe tener entre 10 y 450 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    this.btnCrearComentario = false;
     this.comentarioCreado.fk_actividad = this.pk_actividad;
     const fecha = new Date();
     this.comentarioCreado.fecha = fecha.toISOString().slice(0, 10);
@@ -313,6 +427,7 @@ export class ActividadesComponent implements OnInit {
           this.toastr.error('No se pudo agregar el comentario', 'Error', {
             timeOut: 3000,
           });
+          this.btnCrearComentario = true;
         }
       );
   }

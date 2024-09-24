@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { EquipoArea } from 'src/app/models/equipo-area';
+import { AuthService } from 'src/app/services/auth.service';
 import { EquipoAreaService } from 'src/app/services/equipo-area.service';
 import Swal from 'sweetalert2';
 
@@ -32,27 +33,31 @@ export class EquiposAreasComponent implements OnInit{
   botonHabilitado: boolean = true;
 
   // Identificadores del usuario
-  datoSesion: any = [];
-  datoSesionObject: any = [];
+  datoSesion: any;
   rol: any = null;
   area: any = null;
   empresa: any = null;
   plan: any = null;
 
-  constructor(private equipoAreaService: EquipoAreaService, private toastr: ToastrService, private dialog: MatDialog, private router: Router){}
+  constructor(
+    private equipoAreaService: EquipoAreaService, 
+    private toastr: ToastrService, 
+    private dialog: MatDialog, 
+    private router: Router,
+    private authService: AuthService
+  ){}
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
     // Validar si el usuario ha iniciado sesión
-    this.datoSesion = sessionStorage.getItem('userData');
-    this.datoSesionObject = JSON.parse(this.datoSesion);
+    this.datoSesion = this.authService.getUserData();
 
-    if (this.datoSesionObject) {
-      this.rol = this.datoSesionObject.fk_rol || null;
-      this.area = this.datoSesionObject.fk_area || null;
-      this.empresa = this.datoSesionObject.fk_empresa || null;
-      this.plan = this.datoSesionObject.fk_suscripcion || null;
+    if (this.datoSesion) {
+      this.rol = this.datoSesion.fk_rol || null;
+      this.area = this.datoSesion.fk_area || null;
+      this.empresa = this.datoSesion.fk_empresa || null;
+      this.plan = this.datoSesion.fk_suscripcion || null;
     }
 
     if(this.rol != null && this.rol != 4){
@@ -68,7 +73,6 @@ export class EquiposAreasComponent implements OnInit{
   obtenerAreas(){
     this.equipoAreaService.obtenerAreas(this.empresa).subscribe((res) => {
       this.equiposAreas = res;
-      console.log(this.equiposAreas)
       this.dataSource = new MatTableDataSource(this.equiposAreas);
       this.dataSource.paginator = this.paginator;
     },err => console.log(err)
@@ -139,7 +143,15 @@ export class EquiposAreasComponent implements OnInit{
   }
 
   crearArea(){
+    if (!this.equipoCreado.nombre || this.equipoCreado.nombre.length < 3 || this.equipoCreado.nombre.length > 50) {
+      this.toastr.error('El nombre del equipo/área debe tener entre 3 y 50 caracteres', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Esta madre tira paro pa que no se den varios clicks
     this.botonHabilitado = false
+
+    // Registro
     this.equipoCreado.fk_empresa = this.empresa;
     this.equipoAreaService.registrarArea(this.equipoCreado).subscribe(res => {
       this.toastr.success('Los datos del equipo/área se guardaron exitosamente','Éxito',{timeOut: 3000})
@@ -152,6 +164,11 @@ export class EquiposAreasComponent implements OnInit{
   }
 
   modificarArea(){
+    if (!this.datosEquipo.nombre || this.datosEquipo.nombre.length < 3 || this.datosEquipo.nombre.length > 50) {
+      this.toastr.error('El nombre del equipo/área debe tener entre 3 y 50 caracteres', 'Error', {timeOut: 3000});
+      return;
+    }
+
     this.equipoAreaService.modificarArea(this.pk_area, this.datosEquipo).subscribe(res =>{
       this.toastr.success('Se modificaron los datos del equipo/área exitosamente','Éxito',{timeOut: 3000})
       this.modificacionModalAbierto = false;

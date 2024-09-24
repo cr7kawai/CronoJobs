@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { Nota } from 'src/app/models/nota';
 import { Proyecto } from 'src/app/models/proyecto';
+import { AuthService } from 'src/app/services/auth.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { ProyectoService } from 'src/app/services/proyecto.service';
 import Swal from 'sweetalert2';
@@ -48,8 +49,8 @@ export class ProyectosComponent implements OnInit {
   proyectosDataSource = new MatTableDataSource(this.proyectos);
   proyectosAreaDataSource = new MatTableDataSource(this.proyectosArea);
 
-  datoSesion: any = [];
-  datoSesionObject: any = [];
+  // Datos de la sesion
+  datoSesion: any;
   rol: any = null;
   empresa: any = null;
   plan: any = null;
@@ -58,25 +59,28 @@ export class ProyectosComponent implements OnInit {
   proyecto: any = [];
   isCerrarButtonRed = true; 
 
+  botonNotaCreada: boolean = true;
+  btnCrearProyecto: boolean = true;
+
   constructor(
     private proyectoService: ProyectoService,
     private notaService: NotaService,
     private toastr: ToastrService,
     private dialog: MatDialog,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
     // Validar si el usuario ha iniciado sesión
-    this.datoSesion = sessionStorage.getItem('userData');
-    this.datoSesionObject = JSON.parse(this.datoSesion);
-    if (this.datoSesionObject) {
-      this.rol = this.datoSesionObject.fk_rol || null;
-      this.empresa = this.datoSesionObject.fk_empresa || null;
-      this.plan = this.datoSesionObject.fk_suscripcion || null;
+    this.datoSesion = this.authService.getUserData();
+    if (this.datoSesion) {
+      this.rol = this.datoSesion.fk_rol || null;
+      this.empresa = this.datoSesion.fk_empresa || null;
+      this.plan = this.datoSesion.fk_suscripcion || null;
       console.log(this.plan)
     } else {
       this.router.navigate(['/403']);
@@ -103,7 +107,7 @@ export class ProyectosComponent implements OnInit {
 
   obtenerProyectosArea() {
     this.proyectoService
-      .obtenerProyectosArea(this.datoSesionObject.fk_area)
+      .obtenerProyectosArea(this.datoSesion.fk_area)
       .subscribe(
         (res) => {
           this.proyectosArea = res;
@@ -178,6 +182,7 @@ export class ProyectosComponent implements OnInit {
 
   abrirRegistroModal() {
     this.registroModalAbierto = true;
+    this.btnCrearProyecto = true;
   }
 
   abrirModificacionModal(pk_proyecto: any) {
@@ -199,6 +204,7 @@ export class ProyectosComponent implements OnInit {
   abrirNotaModal(pk_proyecto: any) {
     this.notaModalAbierto = true;
     this.pk_proyecto = pk_proyecto;
+    this.botonNotaCreada = true;
     this.cargarNotas();
   }
 
@@ -255,8 +261,52 @@ export class ProyectosComponent implements OnInit {
   }
 
   crearProyecto() {
+
+    if (!this.proyectoCreado.nombre) {
+      this.toastr.error('El nombre del proyecto es requerido', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.proyectoCreado.nombre.length < 3 || this.proyectoCreado.nombre.length > 100) {
+      this.toastr.error('El nombre del proyecto debe tener entre 3 y 100 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de la descripción
+    if (!this.proyectoCreado.descripcion) {
+      this.toastr.error('La descripción es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.proyectoCreado.descripcion.length < 10 || this.proyectoCreado.descripcion.length > 450) {
+      this.toastr.error('La descripción debe tener entre 10 y 450 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha de inicio
+    if (!this.proyectoCreado.fecha_inicio) {
+      this.toastr.error('La fecha de inicio es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha fin
+    if (!this.proyectoCreado.fecha_fin) {
+      this.toastr.error('La fecha de finalización es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de las fechas
+    const fechaInicio = new Date(this.proyectoCreado.fecha_inicio);
+    const fechaFin = new Date(this.proyectoCreado.fecha_fin);
+  
+    if (fechaInicio >= fechaFin) {
+      this.toastr.error('La fecha de finalización debe ser mayor a la fecha de inicio', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    this.btnCrearProyecto = false;
     this.proyectoCreado.estado = false;
-    this.proyectoCreado.fk_area = this.datoSesionObject.fk_area;
+    this.proyectoCreado.fk_area = this.datoSesion.fk_area;
     this.proyectoService.registrarProyecto(this.proyectoCreado).subscribe(
       (res) => {
         this.toastr.success(
@@ -272,11 +322,54 @@ export class ProyectosComponent implements OnInit {
         this.toastr.error('No se pudo registrar el proyecto', 'Error', {
           timeOut: 3000,
         });
+        this.btnCrearProyecto = true;
       }
     );
   }
 
   modificarProyecto() {
+    if (!this.modificacionProyecto.nombre) {
+      this.toastr.error('El nombre del proyecto es requerido', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.modificacionProyecto.nombre.length < 3 || this.modificacionProyecto.nombre.length > 100) {
+      this.toastr.error('El nombre del proyecto debe tener entre 3 y 100 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de la descripción
+    if (!this.modificacionProyecto.descripcion) {
+      this.toastr.error('La descripción es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.modificacionProyecto.descripcion.length < 10 || this.modificacionProyecto.descripcion.length > 450) {
+      this.toastr.error('La descripción debe tener entre 10 y 450 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha de inicio
+    if (!this.modificacionProyecto.fecha_inicio) {
+      this.toastr.error('La fecha de inicio es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+
+    // Validación de la fecha fin
+    if (!this.modificacionProyecto.fecha_fin) {
+      this.toastr.error('La fecha de finalización es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de las fechas
+    const fechaInicio = new Date(this.modificacionProyecto.fecha_inicio);
+    const fechaFin = new Date(this.modificacionProyecto.fecha_fin);
+  
+    if (fechaInicio >= fechaFin) {
+      this.toastr.error('La fecha de finalización debe ser mayor a la fecha de inicio', 'Error', { timeOut: 3000 });
+      return;
+    }
+
     this.proyectoService
       .modificarProyecto(this.pk_proyecto, this.modificacionProyecto)
       .subscribe(
@@ -327,6 +420,28 @@ export class ProyectosComponent implements OnInit {
 
   //Agregar Nota
   agregarNota() {
+    
+    if (!this.notaCreada.nombre) {
+      this.toastr.error('El título es requerido', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.notaCreada.nombre.length < 3 || this.notaCreada.nombre.length > 50) {
+      this.toastr.error('El título debe tener entre 3 y 50 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    // Validación de la descripción
+    if (!this.notaCreada.descripcion) {
+      this.toastr.error('La descripción es requerida', 'Error', { timeOut: 3000 });
+      return;
+    }
+  
+    if (this.notaCreada.descripcion.length < 20 || this.notaCreada.descripcion.length > 300) {
+      this.toastr.error('La descripción debe tener entre 20 y 300 caracteres', 'Error', { timeOut: 3000 });
+      return;
+    }
+    
     const ahora = new Date();
     // Ajustar la hora a la zona horaria local
     const fechaLocal = new Date(
@@ -334,6 +449,7 @@ export class ProyectosComponent implements OnInit {
     );
     this.notaCreada.fecha = fechaLocal.toISOString().split('T')[0];
     this.notaCreada.fk_proyecto = this.pk_proyecto;
+    this.botonNotaCreada = false;
     this.notaService.registrarNota(this.notaCreada).subscribe(
       (res) => {
         this.toastr.success('La nota ha sido agregada exitosamente', 'Éxito', {
@@ -347,6 +463,7 @@ export class ProyectosComponent implements OnInit {
         this.toastr.error('No se pudo agregar la nota', 'Error', {
           timeOut: 3000,
         });
+        this.botonNotaCreada = true;
       }
     );
   }

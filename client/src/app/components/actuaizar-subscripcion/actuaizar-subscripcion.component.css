@@ -1,0 +1,296 @@
+.card{
+    margin: 30px;
+}
+
+.captcha-container {
+  display: flex; /* Utiliza el modelo de caja flexible */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  height: 100%; /* Ajusta la altura al 100% del contenedor padre */
+}
+
+.row {
+    margin-bottom: 5px;
+}
+
+.linea {
+    display: inline-block;
+}
+
+label {
+    color: #020061;
+}
+
+.texto:focus {
+    border: 1px solid #020061;
+    box-shadow: 0 0 5px #020061;
+}
+
+select:focus {
+    border: 1px solid #020061;
+    box-shadow: 0 0 5px #020061;
+}
+
+.btn-large {
+    margin-top: 15px;
+    width: 100px;
+}
+
+.anterior{
+    background-color: #8a2be2;
+    color: #ffffff;
+    margin-right: 10px;
+}
+
+.siguiente{
+    background-color: #3733f5;
+    color: #ffffff;
+    margin-left: 10px;
+}
+
+.anterior:hover{
+    background-color: #a15de0;
+}
+
+.siguiente:hover{   
+    background-color: #5856e4;
+}
+
+.anterior:active {
+    background-color: #8a2be2; /* Cambia el color cuando se presiona el botón */
+    color: #ffffff;
+}
+
+.siguiente:active {
+    background-color: #3733f5; /* Cambia el color cuando se presiona el botón */
+    color: #ffffff;
+}
+
+
+/* Planes y servicios */
+.price {
+    display: inline-block; /* Necesario para permitir la transformación */
+    animation: bounce 2s infinite; /* Ajusta la duración y repeticiones según prefieras */
+  }
+  
+  .card-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  
+  .pricing-card {
+    background-color: #ffffff;
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 300px; /* Aumenta el ancho para más 'regordete' */
+    margin: 4rem auto; /* Centrado con margen */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem; /* Aumento de padding para más 'cuerpo' */
+    position: relative;
+    min-height: 400px; /* Aumenta la altura mínima para más 'cuerpo' */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .pricing-header {
+    width: 120px; /* Aumenta el tamaño para equilibrar */
+    height: 120px; /* Aumenta el tamaño para equilibrar */
+    border-radius: 50%; /* Mantiene la forma circular */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -60px; /* Ajuste para mantener la posición adecuada */
+    left: calc(50% - 60px); /* Ajuste para mantener la posición adecuada */
+    flex-direction: column;
+  }
+  
+  .pricing-header.basic {
+    background-color: #4169e1; /* Color azul para el plan básico */
+  }
+  
+  .pricing-header.standard {
+    background-color: #4169e1; /* Color verde para el plan estándar */
+  }
+  
+  .pricing-header.premium {
+    background-color: #4169e1; /* Color rojo para el plan premium */
+  }
+  
+  .price-tag {
+    font-size: 30em;
+    font-weight: bold;
+    margin-top: 0px; /* Espacio entre el título del plan y el precio */
+  }
+  
+  .buy-now {
+    background-color: #4169e1; /* Un morado vibrante */
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: auto; /* Para asegurar que el botón esté al final de la tarjeta */
+    width: 80%; /* O el ancho que prefieras */
+    transition: background-color 0.5s; /* Efecto suave al cambiar de color */
+  }
+  
+  .buy-now:hover {
+    background-color: #4169e1b0; /* Un morado ligeramente más oscuro para el efecto hover */
+  }
+  
+  /* Lista de características */
+  .plan-features {
+    list-style: none;
+    padding: 0;
+    margin-top: 0rem; /* Espacio para que la lista comience debajo del círculo del encabezado */
+  }
+  
+  .plan-features li {
+    margin: 10px 0;
+    /* Agregar los íconos de check o cruz antes de cada elemento */
+  }
+  
+  .plan-title {
+    font-size: 1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  
+  .buy-now {
+    /* ... tus estilos existentes para .buy-now ... */
+    padding: 15px 20px; /* Aumenta el padding para un botón más grande */
+    margin-top: auto; /* Asegura que el botón esté en la parte inferior */
+  }
+  
+  /* Ajustes para los precios */
+  .price-tag {
+    font-size: 2em; /* Aumenta el tamaño del texto del precio */
+    margin-top: 15px; /* Espacio entre el título del plan y el precio */
+  }
+  
+  /* Ajustes para el título del plan */
+  .plan-title {
+    font-size: 1.2em; /* Aumenta el tamaño del texto */
+  }
+  
+  /* Ajustes para la lista de características */
+  .plan-features {
+    margin-top: 2.5rem; /* Ajusta según sea necesario para el nuevo tamaño del encabezado */
+  }
+
+  .ultimo-btn{
+    margin-top: -120px;
+  }
+
+  .paypal-button-container {
+    padding-left: 24%;
+    padding-right: 24%;
+  }
+
+  @media (min-width: 1600px) {
+    .paypal-button-container {
+      padding-left: 25%
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .paypal-button-container {
+      padding-left: 28%
+    }
+
+    .card-container {
+      max-width: 1000px;
+      overflow-x: auto;
+      display: flex;
+    }
+  
+    .pricing-card {
+      margin-top: 70px;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+  }
+
+  @media (max-width: 554px) {
+    .paypal-button-container {
+      padding-left: 27%
+    }
+  }
+
+  @media (max-width: 476px) {
+    .paypal-button-container {
+      padding-left: 24%
+    }
+  }
+
+  @media (max-width: 410px) {
+    .paypal-button-container {
+      padding-left: 20%
+    }
+  }
+
+  @media (max-width: 400px) {
+    .captcha-container {
+      overflow-x: auto;
+      display: flex;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .paypal-button-container {
+      padding-left: 15%
+    }
+  }
+
+  @media (max-width: 339px) {
+    .paypal-button-container {
+      margin-left: -30px
+    }
+  }
+
+  @media (max-width: 329px) {
+    .siguiente{
+      margin-left: 0px;
+    }
+    .finalizar{
+      margin-left: 0px;
+      margin-top: -120px;
+    }
+  }
+
+  @media (max-width: 319px) {
+    .anterior{
+      margin-right: 5px;
+    }
+  }
+
+  @media (max-width: 314px) {
+    .paypal-button-container {
+      margin-left: -40px;
+    }
+
+    .anterior{
+      margin-right: 3px;
+    }
+  }
+
+  @media (max-width: 309px) {
+    .anterior{
+      margin-right: 0px;
+    }
+  
+    .siguiente{
+        margin-left: 0px;
+    }
+  }
+
+  @media (max-width: 300px) {
+    .paypal-button-container {
+      margin-left: -50px;
+    }
+  }

@@ -33,6 +33,10 @@ export class UsuarioService {
     return this.http.get(`${this.API_URI}/obtener/${id_user}`);
   }
 
+  obtenerCredenciales(id_user: any){
+    return this.http.get(`${this.API_URI}/credenciales/${id_user}`);
+  }
+
   obtenerUsuariosArea(id_area: any, id_empresa: any) {
     return this.http.get(`${this.API_URI}/area/${id_area}/${id_empresa}`);
   }
@@ -51,6 +55,14 @@ export class UsuarioService {
 
   cambiarContrasena(id_user: any, email: any, usuarioActualizado: Usuario): Observable<Object> {
     return this.http.put(`${this.API_URI}/password/${id_user}/${email}`,usuarioActualizado);
+  }
+
+  enviarEmailConfirmacion(email:any){
+    return this.http.get(`${this.API_URI}/password/${email}`);
+  }
+
+  obtenerUsuarioEmail(email:any){
+    return this.http.get(`${this.API_URI}/obtener/email/${email}`);
   }
 
   enviarNotificacion(notificacion: Notificacion) {

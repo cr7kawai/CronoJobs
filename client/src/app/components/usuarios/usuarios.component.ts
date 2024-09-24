@@ -9,6 +9,7 @@ import { Usuario } from 'src/app/models/usuario';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { EquipoAreaService } from 'src/app/services/equipo-area.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -17,7 +18,6 @@ import { EquipoAreaService } from 'src/app/services/equipo-area.service';
 })
 export class UsuariosComponent implements OnInit {
   registroModalAbierto = false;
-  passwordModalAbierto = false;
   modificacionModalAbierto = false;
   vistaModalAbierto = false;
   vistaDatos: any = [];
@@ -35,15 +35,13 @@ export class UsuariosComponent implements OnInit {
   areas: any = [];
   pk_usuario: any;
   email: any;
-  usuarioPassword: Usuario = {
-    password: '',
-  };
   usuarioCreado: Usuario = {};
   datosUsuario: any = [];
 
-  // Identificadores del usuario
-  datoSesion: any = [];
-  datoSesionObject: any = [];
+  botonCrearHabilitado: boolean = true;
+
+  // Datos de la sesion
+  datoSesion: any;
   rol: any = null;
   area: any = null;
   empresa: any = null;
@@ -54,21 +52,21 @@ export class UsuariosComponent implements OnInit {
     private equipoAreaService: EquipoAreaService,
     private toastr: ToastrService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
     // Validar si el usuario ha iniciado sesión
-    this.datoSesion = sessionStorage.getItem('userData');
-    this.datoSesionObject = JSON.parse(this.datoSesion);
+    this.datoSesion = this.authService.getUserData();
   
-    if (this.datoSesionObject) {
-      this.rol = this.datoSesionObject.fk_rol || null;
-      this.area = this.datoSesionObject.fk_area || null;
-      this.empresa = this.datoSesionObject.fk_empresa || null;
-      this.plan = this.datoSesionObject.fk_suscripcion || null;
+    if (this.datoSesion) {
+      this.rol = this.datoSesion.fk_rol;
+      this.area = this.datoSesion.fk_area;
+      this.empresa = this.datoSesion.fk_empresa;
+      this.plan = this.datoSesion.fk_suscripcion;
     }
   
     if (this.rol != null && this.rol != 4) {
@@ -89,48 +87,11 @@ export class UsuariosComponent implements OnInit {
       ([roles, areas]) => {
         this.roles = roles;
         this.areas = areas;
-
-        this.filtrarRoles();
       },
       (error) => {
         console.error('Error al obtener datos:', error);
       }
     );
-  }
-  
-  filtrarRoles(){
-    this.usuarioService.obtenerRoles().subscribe(res => {
-      this.roles = res
-
-      const contadorRoles: Record<string, number> = this.usuarios.reduce((contador: any, usuario: any) => {
-        const rol = usuario.rol;
-        contador[rol] = (contador[rol] || 0) + 1;
-        return contador;
-      }, {});
-  
-  
-      const rolesFiltrados = this.roles.filter((rol: any) => {
-        switch (rol.nombre) {
-          case 'Administrador':
-            return contadorRoles['Administrador'] < 2;
-          case 'Supervisor':
-            if (this.plan === 1) {
-              return contadorRoles['Supervisor'] < 2;
-            }
-            return true;
-          case 'Empleado':
-            if (this.plan === 1) {
-              return contadorRoles['Empleado'] < 8;
-            }
-            return true;
-          default:
-            return true;
-        }
-      });
-      
-      // Asignar la lista filtrada de roles de vuelta a this.roles
-      this.roles = rolesFiltrados;
-    });
   }
 
   obtenerUsuarios() {
@@ -190,7 +151,6 @@ export class UsuariosComponent implements OnInit {
             } else {
               this.obtenerUsuariosArea();
             }
-            this.filtrarRoles()
           },
           (error) => {
             this.toastr.error(
@@ -208,6 +168,7 @@ export class UsuariosComponent implements OnInit {
 
   abrirRegistroModal() {
     this.registroModalAbierto = true;
+    this.botonCrearHabilitado = true;
   }
 
   abrirModificacionModal(pk_usuario: any) {
@@ -218,12 +179,6 @@ export class UsuariosComponent implements OnInit {
       const fechaNacimiento = this.datosUsuario.fecha_nacimiento.toString();
       this.datosUsuario.fecha_nacimiento = fechaNacimiento.substring(0, 10);
     });
-  }
-
-  abrirPasswordModal(pk_usuario: any, email: any) {
-    this.passwordModalAbierto = true;
-    this.pk_usuario = pk_usuario;
-    this.email = email;
   }
 
   abrirVistaModal(pk_usuario: any) {
@@ -248,35 +203,182 @@ export class UsuariosComponent implements OnInit {
     this.modificacionModalAbierto = false;
   }
 
-  cerrarPasswordModal() {
-    this.passwordModalAbierto = false;
-  }
-
   crearUsuario() {
-    this.usuarioCreado.fk_empresa = this.empresa;
-    this.usuarioService.registrarUsuario(this.usuarioCreado).subscribe(
-      (res) => {
-        this.toastr.success(
-          'Los datos del empleado se guardaron exitosamente',
-          'Éxito',
-          { timeOut: 3000 }
-        );
-        this.registroModalAbierto = false;
-        this.usuarioCreado = {};
-        this.obtenerUsuarios()
-        this.filtrarRoles()
-      },
-      (err) => {
-        this.toastr.error(
-          'No se pudieron guardar los datos del empleado',
-          'Error',
-          { timeOut: 3000 }
-        );
-      }
-    );
+    // Validación del nombre completo del usuario
+    if (!this.usuarioCreado || !this.usuarioCreado.nombre || !this.usuarioCreado.ape_paterno || !this.usuarioCreado.ape_materno || 
+      this.usuarioCreado.nombre.length < 3 || this.usuarioCreado.ape_paterno.length < 3 || this.usuarioCreado.ape_materno.length < 3 ||
+      this.usuarioCreado.nombre.length > 50 || this.usuarioCreado.ape_paterno.length > 50 || this.usuarioCreado.ape_materno.length > 50) {
+        this.toastr.error('El nombre completo del usuario debe tener entre 3 y 50 caracteres por cada campo', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del correo electrónico
+    if (!this.usuarioCreado.email) {
+      this.toastr.error('El correo electrónico es requerido', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.usuarioCreado.email)) {
+        this.toastr.error('Ingrese un correo electrónico válido', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del teléfono
+    if (!this.usuarioCreado.telefono) {
+      this.toastr.error('El teléfono es requerido', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    const telRegex = /^\d{10}$/;
+    if (!telRegex.test(this.usuarioCreado.telefono)) {
+        this.toastr.error('Ingrese un teléfono válido (10 dígitos numéricos)', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del género
+    if (!this.usuarioCreado.genero) {
+      this.toastr.error('Debe seleccionar un género', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación de la fecha de nacimiento
+    if (!this.usuarioCreado.fecha_nacimiento) {
+      this.toastr.error('La fecha de nacimiento es requerida', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación de la fecha de nacimiento
+    const fechaNacimiento = new Date(this.usuarioCreado.fecha_nacimiento);
+    const fechaActual = new Date();
+    if (fechaNacimiento >= fechaActual) {
+        this.toastr.error('La fecha de nacimiento debe ser anterior a la fecha actual', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del rol
+    if (!this.usuarioCreado.fk_rol) {
+      this.toastr.error('Debe seleccionar un rol para el usuario', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación del área
+    if (!this.usuarioCreado.fk_area && this.usuarioCreado.fk_rol != 1) {
+      this.toastr.error('Debe seleccionar un área para el usuario', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación del rol
+    if (!this.usuarioCreado ||  this.usuarioCreado.fk_rol == 1) {
+      this.usuarioCreado.fk_area = null;
+    }
+
+    // Validación de la contraseña (aquí debes implementar tu lógica para definir qué es una contraseña segura)
+    if (!this.usuarioCreado || !this.usuarioCreado.password || this.usuarioCreado.password.length < 8 || this.usuarioCreado.password.length > 16) {
+        this.toastr.error('La contraseña debe tener entre 8 y 16 caractéres', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    this.botonCrearHabilitado = false
+    this.usuarioService.validarEmailTel(this.usuarioCreado).subscribe(res => {
+      this.usuarioCreado.fk_empresa = this.empresa;
+      this.usuarioService.registrarUsuario(this.usuarioCreado).subscribe(
+        (res) => {
+          this.toastr.success(
+            'Los datos del empleado se guardaron exitosamente',
+            'Éxito',
+            { timeOut: 3000 }
+          );
+          this.registroModalAbierto = false;
+          this.usuarioCreado = {};
+          this.obtenerUsuarios()
+        },
+        (err) => {
+          this.toastr.error(
+            'No se pudieron guardar los datos del empleado',
+            'Error',
+            { timeOut: 3000 }
+          );
+        }
+      );
+    },err => {
+      console.log(err);
+      this.toastr.error(err.error.message,'Error',{timeOut: 3000})
+      this.botonCrearHabilitado = true
+      return;
+    })
   }
 
   modificarUsuario() {
+    // Validación del nombre completo del usuario
+    if (!this.datosUsuario || !this.datosUsuario.nombre || !this.datosUsuario.ape_paterno || !this.datosUsuario.ape_materno || 
+      this.datosUsuario.nombre.length < 3 || this.datosUsuario.ape_paterno.length < 3 || this.datosUsuario.ape_materno.length < 3 ||
+      this.datosUsuario.nombre.length > 50 || this.datosUsuario.ape_paterno.length > 50 || this.datosUsuario.ape_materno.length > 50) {
+        this.toastr.error('El nombre completo del usuario debe tener entre 3 y 50 caracteres por cada campo', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del correo electrónico
+    if (!this.datosUsuario.email) {
+      this.toastr.error('El correo electrónico es requerido', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.datosUsuario.email)) {
+        this.toastr.error('Ingrese un correo electrónico válido', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del teléfono
+    if (!this.datosUsuario.telefono) {
+      this.toastr.error('El teléfono es requerido', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    const telRegex = /^\d{10}$/;
+    if (!telRegex.test(this.datosUsuario.telefono)) {
+        this.toastr.error('Ingrese un teléfono válido (10 dígitos numéricos)', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del género
+    if (!this.datosUsuario.genero) {
+      this.toastr.error('Debe seleccionar un género', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación de la fecha de nacimiento
+    if (!this.datosUsuario.fecha_nacimiento) {
+      this.toastr.error('La fecha de nacimiento es requerida', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación de la fecha de nacimiento
+    const fechaNacimiento = new Date(this.datosUsuario.fecha_nacimiento);
+    const fechaActual = new Date();
+    if (fechaNacimiento >= fechaActual) {
+        this.toastr.error('La fecha de nacimiento debe ser anterior a la fecha actual', 'Error', {timeOut: 3000});
+        return;
+    }
+
+    // Validación del rol
+    if (!this.datosUsuario.fk_rol) {
+      this.toastr.error('Debe seleccionar un rol para el usuario', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación del área
+    if (!this.datosUsuario.fk_area && this.datosUsuario.fk_rol != 1) {
+      this.toastr.error('Debe seleccionar un área para el usuario', 'Error', {timeOut: 3000});
+      return;
+    }
+
+    // Validación del rol
+    if (!this.datosUsuario ||  this.datosUsuario.fk_rol == 1) {
+      this.datosUsuario.fk_area = null;
+    }
+
     this.usuarioService
       .modificarUsuario(this.pk_usuario, this.datosUsuario)
       .subscribe(
@@ -289,7 +391,6 @@ export class UsuariosComponent implements OnInit {
           this.modificacionModalAbierto = false;
           this.datosUsuario = {};
           this.obtenerUsuarios()
-          this.filtrarRoles();
         },
         (err) => {
           this.toastr.warning(
@@ -300,27 +401,6 @@ export class UsuariosComponent implements OnInit {
             }
           );
           console.log(err);
-        }
-      );
-  }
-
-  cambiarPassword() {
-    this.usuarioService
-      .cambiarContrasena(this.pk_usuario, this.email, this.usuarioPassword)
-      .subscribe(
-        (res) => {
-          this.passwordModalAbierto = false;
-          this.toastr.success(
-            'La contraseña se actualizó exitosamente',
-            'Éxito',
-            { timeOut: 3000 }
-          );
-          this.usuarioPassword.password = '';
-        },
-        (err) => {
-          this.toastr.warning('No se pudo actualizar la contraseña', 'Error', {
-            timeOut: 3000,
-          });
         }
       );
   }

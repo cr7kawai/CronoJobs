@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import notaController from "../controller/nota.controller";
+import { verifyToken } from "../middlewares/auth.middleware";
 
 class NotaRoutes{
     
@@ -11,10 +12,10 @@ class NotaRoutes{
     }
 
     config(): void {
-        this.router.get('/:id_proyecto',notaController.obtenerNotas);
-        this.router.post('/',notaController.registrarNota);
-        this.router.put('/:id_nota',notaController.modificarNota);
-        this.router.delete('/:id_nota',notaController.eliminarNota);
+        this.router.get('/:id_proyecto',verifyToken, notaController.obtenerNotas);
+        this.router.post('/',verifyToken, notaController.registrarNota);
+        this.router.put('/:id_nota',verifyToken, notaController.modificarNota);
+        this.router.delete('/:id_nota',verifyToken, notaController.eliminarNota);
     }
 }
 

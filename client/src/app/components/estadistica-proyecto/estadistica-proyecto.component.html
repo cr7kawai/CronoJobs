@@ -12,7 +12,11 @@
   </div>
 </div>
 
-<div class="card graf">
+<div class="card graf" *ngIf="completas.cantidadResultados == 0 && pendientes.cantidadResultados == 0 && retrasadas.cantidadResultados == 0">
+  <h2>El proyecto no tiene actividades registradas</h2>
+</div>
+
+<div class="card graf" *ngIf="completas.cantidadResultados || pendientes.cantidadResultados || retrasadas.cantidadResultados">
   <div class="row encabezado-graf" *ngIf="rol == 2">
     <div class="col-md-12 proyecto">
       <h2 style="color: #020061">{{ proyecto.nombre }}</h2>
@@ -357,6 +361,7 @@
           </button>
           <button
             type="submit"
+            [disabled]="notificacionBoton == false"
             class="btn btn-primary btn-large guardar"
             (click)="crearNotificacion()"
           >

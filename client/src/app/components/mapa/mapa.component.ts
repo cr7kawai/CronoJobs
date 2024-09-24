@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-mapa',
@@ -13,8 +14,7 @@ export class MapaComponent implements OnInit {
   showResults: boolean = true;
   
   // Datos de la sesión
-  datoSesion: any = sessionStorage.getItem('userData');
-  datoSesionObject: any;
+  datoSesion: any;
   usuario: any = null;
   rol: any = null;
 
@@ -24,15 +24,15 @@ export class MapaComponent implements OnInit {
   constructor(
     private router: Router,
     private elementRef: ElementRef,
+    private authService: AuthService
   ) {}
     
   ngOnInit() {
+    // Verificar la sesión
+    this.datoSesion = this.authService.getUserData();
     if (this.datoSesion) {
-      this.datoSesionObject = JSON.parse(this.datoSesion);
-      if (this.datoSesionObject) {
-        this.usuario = this.datoSesionObject.nombre;
-        this.rol = this.datoSesionObject.fk_rol;
-      }
+      this.usuario = this.datoSesion.nombre;
+      this.rol = this.datoSesion.fk_rol;
     }
 
     // Construir mapa del sitio
@@ -54,7 +54,8 @@ export class MapaComponent implements OnInit {
     if(this.rol == null){
       this.siteMap['sesion'] = [ 
         ['Inicio de Sesión','/login'],
-        ['Registro','/registro']
+        ['Registro','/registro'],
+        ['Cambio de Contraseña','/cambiar-contrasena']
       ];
     }
 

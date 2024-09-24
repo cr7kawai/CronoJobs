@@ -79,6 +79,15 @@
             >Registrar mi empresa</a
           >
         </li>
+        <li class="nav-item" *ngIf="plan == 1 && rol == 2">
+          <a
+            class="nav-link active"
+            href="/actualizar-subscripcion"
+            routerLink="/actualizar-subscripcion"
+            routerLinkActive="active-link"
+            >Actualizar Subscripción</a
+          >
+        </li>
         <li class="nav-item" *ngIf="rol != null">
           <a class="nav-link active" href="/" (click)="cerrarSesion()"
             >Cerrar Sesión</a
